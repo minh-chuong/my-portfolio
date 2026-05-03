@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lê Ngọc Minh Chương — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#06090f;--surface:#0c1018;--card:#101520;--card2:#141c26;
+  --border:rgba(56,189,248,0.09);--border2:rgba(56,189,248,0.22);
+  --accent:#38bdf8;--accent2:#34d399;--accent3:#f472b6;
+  --text:#e2eeff;--muted:#6b84a0;--dim:#334155;
+  --mono:'Space Mono',monospace;--sans:'Outfit',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;}
+
+.cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s,background .15s;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(56,189,248,0.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;}
+
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(56,189,248,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.025) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;opacity:.10;animation:drift 18s ease-in-out infinite alternate;}
+.orb1{width:650px;height:650px;background:#0ea5e9;top:-180px;left:-180px;}
+.orb2{width:480px;height:480px;background:#10b981;bottom:-80px;right:-80px;animation-delay:-8s;}
+.orb3{width:380px;height:380px;background:#8b5cf6;top:45%;left:38%;animation-delay:-14s;}
+@keyframes drift{from{transform:translate(0,0) scale(1);}to{transform:translate(36px,28px) scale(1.07);}}
+
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
+#app{position:relative;z-index:1;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,9,15,0.85);backdrop-filter:blur(28px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--mono);font-size:13px;color:var(--accent);text-decoration:none;letter-spacing:.5px;}
+.nav-logo span{color:var(--accent2);}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .2s;letter-spacing:.5px;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(56,189,248,0.08);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-badge{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--accent2);background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);padding:5px 12px;border-radius:20px;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 7px var(--accent2);animation:blink 2.4s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.4;}}
+.glang{display:flex;background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:20px;overflow:hidden;padding:2px;}
+.glang-btn{padding:4px 12px;border-radius:16px;font-family:var(--mono);font-size:11px;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .18s;letter-spacing:.3px;}
+.glang-btn.active{background:var(--accent);color:#000;font-weight:700;}
+.glang-btn:hover:not(.active){color:var(--text);}
+
+.section-wrap{max-width:1060px;margin:0 auto;padding:96px 52px;}
+.section-label{display:flex;align-items:center;gap:14px;margin-bottom:56px;}
+.section-num{font-family:var(--mono);font-size:11px;color:var(--accent);opacity:.55;letter-spacing:2px;}
+.section-label h2{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.section-line{flex:1;height:1px;background:var(--border);}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:1060px;margin:0 auto;padding:110px 52px 60px;}
+.hero-tag{display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;padding:7px 16px;border-radius:20px;background:rgba(56,189,248,0.07);border:1px solid rgba(56,189,248,0.18);font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:1.5px;}
+.hero-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);box-shadow:0 0 6px var(--accent2);}
+.hero-name{font-size:clamp(46px,8.5vw,96px);font-weight:900;line-height:.95;letter-spacing:-3px;margin-bottom:12px;}
+.hero-name .vn{display:block;color:rgba(226,238,255,0.35);font-size:.42em;letter-spacing:4px;font-weight:300;font-family:var(--mono);margin-bottom:12px;}
+.hero-name .main{display:block;color:var(--text);}
+.hero-name .hi{display:block;background:linear-gradient(90deg,var(--accent) 0%,var(--accent2) 55%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shimmer 5s linear infinite;}
+@keyframes shimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
+.hero-sub{display:flex;align-items:center;gap:12px;margin:20px 0 30px;flex-wrap:wrap;}
+.hero-sub-item{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.5px;}
+.hero-sub-sep{color:var(--dim);}
+.hero-bio{max-width:520px;font-size:16px;line-height:1.85;color:var(--muted);font-weight:300;margin-bottom:44px;}
+.hero-bio strong{color:var(--text);font-weight:600;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:72px;}
+.btn-p{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:8px;background:var(--accent);color:#000;font-family:var(--mono);font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.5px;transition:transform .2s,box-shadow .2s;}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(56,189,248,.35);}
+.btn-s{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:8px;background:transparent;color:var(--text);font-family:var(--mono);font-size:12px;text-decoration:none;letter-spacing:.5px;border:1px solid var(--border2);transition:all .2s;}
+.btn-s:hover{border-color:var(--accent);color:var(--accent);background:rgba(56,189,248,.05);}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;}
+.hero-stat-num{font-size:32px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1;}
+.hero-stat-num span{font-size:18px;color:var(--accent);}
+.hero-stat-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:4px;text-transform:uppercase;}
+
+/* ABOUT */
+.about-strip{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .25s,transform .25s;}
+.about-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.about-card-title{font-family:var(--mono);font-size:10px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.about-card p{font-size:14px;line-height:1.8;color:var(--muted);}
+.about-card p strong{color:var(--text);}
+.info-rows{display:flex;flex-direction:column;gap:10px;}
+.info-row{display:flex;align-items:center;gap:10px;}
+.info-icon{width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,0.08);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.info-label{font-family:var(--mono);font-size:10px;color:var(--dim);width:72px;flex-shrink:0;}
+.info-val{font-size:13px;color:var(--text);}
+.info-val a{color:var(--accent);text-decoration:none;}
+.info-val a:hover{text-decoration:underline;}
+
+/* EXPERIENCE */
+.exp-list{display:flex;flex-direction:column;}
+.exp-item{display:grid;grid-template-columns:148px 1fr;padding:36px 0;border-bottom:1px solid var(--border);position:relative;}
+.exp-item:first-child{padding-top:0;}
+.exp-item::after{content:'';position:absolute;left:148px;top:0;bottom:0;width:1px;background:var(--border);}
+.exp-time{font-family:var(--mono);font-size:11px;color:var(--dim);padding-top:3px;letter-spacing:.5px;line-height:1.7;}
+.exp-body{padding-left:40px;}
+.exp-role{font-size:19px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.exp-where{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:14px;}
+.exp-desc{font-size:13.5px;line-height:1.8;color:var(--muted);margin-bottom:16px;}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{padding:3px 11px;border-radius:20px;font-family:var(--mono);font-size:10px;background:rgba(56,189,248,0.07);color:var(--accent);border:1px solid rgba(56,189,248,0.18);}
+.tag.green{background:rgba(52,211,153,0.07);color:var(--accent2);border-color:rgba(52,211,153,0.2);}
+.tag.pink{background:rgba(244,114,182,0.07);color:var(--accent3);border-color:rgba(244,114,182,0.2);}
+
+/* SKILLS */
+.lang-toggle{display:flex;gap:8px;margin-bottom:36px;}
+.lang-btn{padding:7px 20px;border-radius:20px;font-family:var(--mono);font-size:11px;letter-spacing:.5px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.lang-btn.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+.lang-btn:hover:not(.active){border-color:var(--accent);color:var(--text);}
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.skill-group{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;transition:border-color .25s,transform .25s;}
+.skill-group:hover{border-color:var(--border2);transform:translateY(-3px);}
+.sg-title{font-family:var(--mono);font-size:10px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+.sk{margin-bottom:14px;}.sk:last-child{margin-bottom:0;}
+.sk-top{display:flex;justify-content:space-between;margin-bottom:6px;}
+.sk-name{font-size:13px;color:var(--text);font-weight:500;}
+.sk-pct{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.sk-track{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.sk-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform 1.1s cubic-bezier(.4,0,.2,1);}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:all .3s;position:relative;overflow:hidden;}
+.proj-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(56,189,248,.04),transparent);opacity:0;transition:opacity .3s;}
+.proj-card:hover{border-color:rgba(56,189,248,.38);transform:translateY(-4px);box-shadow:0 20px 56px rgba(0,0,0,.45);}
+.proj-card:hover::after{opacity:1;}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.proj-icon{width:42px;height:42px;border-radius:10px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);display:flex;align-items:center;justify-content:center;font-size:19px;}
+.proj-arrow{color:var(--dim);font-size:18px;transition:color .2s,transform .2s;}
+.proj-card:hover .proj-arrow{color:var(--accent);transform:translate(3px,-3px);}
+.proj-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:9px;}
+.proj-desc{font-size:13px;line-height:1.75;color:var(--muted);flex:1;margin-bottom:18px;}
+.proj-wip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--accent3);border:1px solid rgba(244,114,182,.2);padding:3px 9px;border-radius:20px;margin-bottom:8px;background:rgba(244,114,182,.06);}
+
+/* EDUCATION */
+.edu-list{display:flex;flex-direction:column;gap:14px;}
+.edu-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 32px;display:flex;gap:28px;align-items:flex-start;transition:border-color .25s;}
+.edu-card:hover{border-color:var(--border2);}
+.edu-yr{flex-shrink:0;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.18);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--accent);text-align:center;white-space:nowrap;line-height:1.65;}
+.edu-school{font-size:17px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.edu-deg{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:12px;}
+.edu-meta{display:flex;flex-wrap:wrap;gap:8px;}
+.edu-badge{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(52,211,153,.07);color:var(--accent2);border:1px solid rgba(52,211,153,.2);}
+.edu-badge.blue{background:rgba(56,189,248,.07);color:var(--accent);border-color:rgba(56,189,248,.2);}
+
+/* HOBBIES */
+.hobbies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.hobby-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 20px;text-align:center;transition:all .25s;}
+.hobby-card:hover{border-color:var(--border2);transform:translateY(-4px);}
+.hobby-icon{font-size:28px;margin-bottom:10px;}
+.hobby-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.hobby-desc{font-size:11.5px;color:var(--muted);line-height:1.6;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start;}
+.contact-intro h3{font-size:38px;font-weight:800;line-height:1.15;margin-bottom:18px;letter-spacing:-1px;}
+.contact-intro h3 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.contact-intro p{font-size:14px;color:var(--muted);line-height:1.85;}
+.contact-links{display:flex;flex-direction:column;gap:10px;}
+.cl{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:11px;background:var(--card);border:1px solid var(--border);text-decoration:none;color:var(--text);transition:all .25s;}
+.cl:hover{border-color:var(--accent);background:rgba(56,189,248,.05);transform:translateX(5px);}
+.cl-icon{width:36px;height:36px;border-radius:8px;background:rgba(56,189,248,.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.cl-body{flex:1;}
+.cl-lbl{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.cl-val{font-size:13px;color:var(--text);font-weight:500;}
+.cl-arrow{color:var(--dim);transition:color .2s,transform .2s;}
+.cl:hover .cl-arrow{color:var(--accent);transform:translateX(3px);}
+
+footer{border-top:1px solid var(--border);padding:28px 52px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--dim);}
+
+/* ═══════════════ CHATBOT ═══════════════ */
+.chat-fab{
+  position:fixed;bottom:24px;right:24px;z-index:9000;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#9333ea);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px rgba(124,58,237,.5);
+  transition:transform .2s,box-shadow .2s;
+}
+.chat-fab:hover{transform:scale(1.08);}
+.chat-fab.open .fab-chat{display:none;}
+.chat-fab.open .fab-close{display:flex;}
+.fab-chat{display:flex;align-items:center;justify-content:center;}
+.fab-close{display:none;align-items:center;justify-content:center;}
+
+/* ── PANEL: fixed 340px, always bottom-right corner ── */
+.chat-panel{
+  position:fixed !important;
+  bottom:88px !important;
+  right:20px !important;
+  left:auto !important;
+  width:340px !important;
+  max-width:340px !important;
+  min-width:300px !important;
+  background:#1a1a2e;
+  border:1px solid rgba(139,92,246,0.35);
+  border-radius:16px;
+  z-index:8999;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 0 1px rgba(139,92,246,0.1);
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(14px) scale(0.96);
+  transition:opacity .22s ease,transform .22s ease;
+  pointer-events:none;
+}
+.chat-panel.open{
+  opacity:1 !important;
+  transform:translateY(0) scale(1) !important;
+  pointer-events:all !important;
+}
+
+/* Header */
+.chat-header{
+  padding:13px 15px;
+  background:linear-gradient(90deg,rgba(109,40,217,0.6),rgba(124,58,237,0.3));
+  border-bottom:1px solid rgba(139,92,246,0.25);
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+}
+.chat-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;
+  flex-shrink:0;
+}
+.chat-header-name{font-size:13px;font-weight:700;color:#fff;line-height:1.2;}
+.chat-header-status{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;color:#4ade80;margin-top:2px;
+}
+.chat-status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#4ade80;flex-shrink:0;
+  animation:sdot 2s ease-in-out infinite;
+}
+@keyframes sdot{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* Messages */
+.chat-messages{
+  overflow-y:auto;
+  padding:14px 13px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:130px;max-height:200px;
+  background:#0d0d1f;
+  flex-shrink:0;
+}
+.chat-messages::-webkit-scrollbar{width:2px;}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(139,92,246,.3);border-radius:2px;}
+
+.msg{display:flex;flex-direction:column;}
+.msg.user{align-items:flex-end;}
+.msg.bot{align-items:flex-start;}
+.msg-bubble{
+  max-width:86%;
+  padding:10px 13px;
+  font-size:13px;line-height:1.55;
+  white-space:pre-wrap;word-break:break-word;
+}
+.msg.bot .msg-bubble{
+  background:#1c1c38;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px 14px 14px 3px;
+  color:#e2e8f0;
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,#6d28d9,#7c3aed);
+  border-radius:14px 14px 3px 14px;
+  color:#fff;
+}
+
+/* Typing dots */
+.typing-bubble{
+  background:#1c1c38;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px 14px 14px 3px;
+  padding:10px 14px;
+  display:flex;gap:4px;align-items:center;
+}
+.typing-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#7c3aed;opacity:.4;
+  animation:tdot 1.3s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:.22s;}
+.typing-dot:nth-child(3){animation-delay:.44s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
+
+/* Suggestion pills */
+.chat-suggestions{
+  padding:8px 12px 10px;
+  display:flex;flex-wrap:wrap;gap:6px;
+  background:#0d0d1f;
+  flex-shrink:0;
+}
+.sug-btn{
+  padding:5px 11px;border-radius:20px;
+  background:rgba(109,40,217,0.18);
+  border:1px solid rgba(139,92,246,0.35);
+  color:#c4b5fd;font-size:12px;
+  font-family:var(--sans);
+  cursor:pointer;
+  transition:background .15s,border-color .15s;
+  line-height:1.3;white-space:nowrap;
+}
+.sug-btn:hover{
+  background:rgba(109,40,217,0.35);
+  border-color:rgba(167,139,250,0.6);
+}
+
+/* Input row */
+.chat-input-row{
+  padding:10px 12px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  display:flex;gap:8px;align-items:center;
+  background:#0d0d1f;
+  flex-shrink:0;
+}
+.chat-input{
+  flex:1;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:9px 16px;
+  color:#e2e8f0;font-size:13px;
+  font-family:var(--sans);
+  resize:none;outline:none;line-height:1.4;
+  max-height:68px;overflow-y:auto;
+}
+.chat-input::placeholder{color:#3d4b63;}
+.chat-input:focus{border-color:rgba(139,92,246,.5);background:rgba(255,255,255,0.06);}
+.chat-send{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:opacity .18s,transform .18s;
+}
+.chat-send:disabled{opacity:.25;}
+.chat-send:not(:disabled):hover{transform:scale(1.1);}
+
+/* Error */
+.chat-error{
+  margin:0 12px 8px;
+  padding:8px 12px;border-radius:8px;
+  background:rgba(239,68,68,.08);
+  border:1px solid rgba(239,68,68,.22);
+  font-size:11px;color:#fca5a5;
+  font-family:var(--mono);flex-shrink:0;
+}
+
+@media(max-width:768px){
+  nav{padding:14px 20px;}.nav-links{display:none;}
+  #hero,.section-wrap{padding-left:20px;padding-right:20px;}
+  .hero-name{letter-spacing:-2px;}
+  .about-strip,.skills-grid,.projects-grid,.hobbies-grid,.contact-grid{grid-template-columns:1fr;}
+  .exp-item{grid-template-columns:1fr;}.exp-item::after{display:none;}.exp-body{padding-left:0;padding-top:10px;}
+  footer{flex-direction:column;gap:10px;text-align:center;}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+<div id="app">
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">chuong<span>.dev</span></a>
+  <div class="nav-links">
+    <a href="#about"      data-vi="Giới thiệu" data-en="About">Giới thiệu</a>
+    <a href="#experience" data-vi="Kinh nghiệm" data-en="Experience">Kinh nghiệm</a>
+    <a href="#skills"     data-vi="Kỹ năng" data-en="Skills">Kỹ năng</a>
+    <a href="#projects"   data-vi="Dự án" data-en="Projects">Dự án</a>
+    <a href="#education"  data-vi="Học vấn" data-en="Education">Học vấn</a>
+    <a href="#contact"    data-vi="Liên hệ" data-en="Contact">Liên hệ</a>
+  </div>
+  <div class="nav-right">
+    <div class="glang">
+      <button class="glang-btn active" onclick="setLang('vi')">🇻🇳 VI</button>
+      <button class="glang-btn"        onclick="setLang('en')">🇬🇧 EN</button>
+    </div>
+    <div class="nav-badge"><span class="nav-dot"></span><span data-vi="Sẵn sàng hợp tác" data-en="Open to Opportunities">Sẵn sàng hợp tác</span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag reveal"><span class="hero-tag-dot"></span><span data-vi="SINH VIÊN NĂM NHẤT · ĐẠI HỌC KINH TẾ QUỐC DÂN" data-en="FIRST-YEAR STUDENT · NATIONAL ECONOMICS UNIVERSITY">SINH VIÊN NĂM NHẤT · ĐẠI HỌC KINH TẾ QUỐC DÂN</span></div>
+  <h1 class="hero-name reveal" style="transition-delay:.08s">
+    <span class="vn">LÊ NGỌC MINH CHƯƠNG</span>
+    <span class="main" data-vi="Xin chào, tôi là" data-en="Hello, I am">Xin chào, tôi là</span>
+    <span class="hi">Minh Chương.</span>
+  </h1>
+  <div class="hero-sub reveal" style="transition-delay:.18s">
+    <span class="hero-sub-item" data-vi="Phân tích kinh doanh" data-en="Business Analytics">Phân tích kinh doanh</span>
+    <span class="hero-sub-sep">·</span>
+    <span class="hero-sub-item" data-vi="Đam mê dữ liệu" data-en="Data Enthusiast">Đam mê dữ liệu</span>
+    <span class="hero-sub-sep">·</span>
+    <span class="hero-sub-item" data-vi="Xây dựng AI" data-en="AI Builder">Xây dựng AI</span>
+    <span class="hero-sub-sep">·</span>
+    <span class="hero-sub-item">Hà Nội, Việt Nam</span>
+  </div>
+  <p class="hero-bio reveal" style="transition-delay:.26s" id="hero-bio-text">
+    Sinh viên năm nhất ngành <strong>Phân tích kinh doanh</strong> tại Đại học Kinh tế Quốc dân. Đam mê ứng dụng dữ liệu và AI để giải quyết các bài toán kinh doanh thực tế. Đang tích cực phát triển kỹ năng SQL, Python và Power BI song song với các dự án AI.
+  </p>
+  <div class="hero-cta reveal" style="transition-delay:.34s">
+    <a href="#projects" class="btn-p">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12h18M13 6l6 6-6 6"/></svg>
+      <span data-vi="Xem dự án" data-en="View Projects">Xem dự án</span>
+    </a>
+    <a href="#contact" class="btn-s"><span data-vi="Liên hệ" data-en="Get in Touch">Liên hệ</span></a>
+  </div>
+  <div class="hero-stats reveal" style="transition-delay:.44s">
+    <div class="hero-stat">
+      <div class="hero-stat-num">SQL<span>✓</span></div>
+      <div class="hero-stat-lbl" data-vi="Hoàn thành LeetCode" data-en="LeetCode Cleared">Hoàn thành LeetCode</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1<span>st</span></div>
+      <div class="hero-stat-lbl" data-vi="AI Agent đã xây dựng" data-en="AI Agent Built">AI Agent đã xây dựng</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">3<span>+</span></div>
+      <div class="hero-stat-lbl" data-vi="Dự án kỹ thuật" data-en="Tech Projects">Dự án kỹ thuật</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2007<span>.</span></div>
+      <div class="hero-stat-lbl" data-vi="Sinh 26 / 01" data-en="Born 26 / 01">Sinh 26 / 01</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap" style="padding-top:0;">
+    <div class="section-label reveal">
+      <span class="section-num">00</span><h2>About</h2><div class="section-line"></div>
+    </div>
+    <div class="about-strip">
+      <div class="about-card reveal">
+        <div class="about-card-title" data-vi="Giới thiệu" data-en="Profile">Giới thiệu</div>
+        <p id="about-p1-text">Cá nhân có <strong>trách nhiệm cao và cam kết mạnh mẽ</strong> — đáng tin cậy trong việc thực hiện các mục tiêu đã đặt ra. Được biết đến là người lắng nghe tốt và thành viên nhóm đáng tin cậy.</p>
+        <br>
+        <p id="about-p2-text">Sở hữu <strong>kỹ năng lập kế hoạch và tổ chức</strong> mạnh mẽ với cách tiếp cận chi tiết. Đang phát triển sự tự tin trong thuyết trình đồng thời xây dựng nền tảng vững chắc về phân tích dữ liệu và AI.</p>
+        <br>
+        <p id="about-p3-text">Quan tâm sâu sắc đến <strong>Trí tuệ nhân tạo</strong> — không chỉ là người dùng mà có tham vọng hiểu, xây dựng và làm chủ các giải pháp dựa trên AI.</p>
+      </div>
+      <div class="about-card reveal" style="transition-delay:.1s">
+        <div class="about-card-title" data-vi="Thông tin liên hệ" data-en="Contact Information">Thông tin liên hệ</div>
+        <div class="info-rows">
+          <div class="info-row"><div class="info-icon">📍</div><span class="info-label" data-vi="Địa chỉ" data-en="Location">Địa chỉ</span><span class="info-val">Cầu Giấy, Hà Nội</span></div>
+          <div class="info-row"><div class="info-icon">📞</div><span class="info-label" data-vi="Điện thoại" data-en="Phone">Điện thoại</span><span class="info-val">0961 097 090</span></div>
+          <div class="info-row"><div class="info-icon">✉️</div><span class="info-label">Email</span><span class="info-val"><a href="mailto:lengocminhchuong07@gmail.com">lengocminhchuong07@gmail.com</a></span></div>
+          <div class="info-row"><div class="info-icon">⌨️</div><span class="info-label">GitHub</span><span class="info-val"><a href="https://github.com/minh-chuong" target="_blank">minh-chuong</a></span></div>
+          <div class="info-row"><div class="info-icon" style="font-size:11px;font-weight:700;color:var(--accent);">in</div><span class="info-label">LinkedIn</span><span class="info-val"><a href="https://www.linkedin.com/in/ngocminhchuong-le-054634390/" target="_blank">ngocminhchuong-le</a></span></div>
+          <div class="info-row"><div class="info-icon">📘</div><span class="info-label">Facebook</span><span class="info-val"><a href="https://www.facebook.com/le.ngoc.minh.chuong" target="_blank">le.ngoc.minh.chuong</a></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">01</span><h2 data-vi="Kinh nghiệm" data-en="Experience">Kinh nghiệm</h2><div class="section-line"></div>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item reveal">
+        <div class="exp-time" data-vi="2024<br>— Hiện tại" data-en="2024<br>— Present">2024<br>— Hiện tại</div>
+        <div class="exp-body">
+          <div class="exp-role" data-vi="Nhà phát triển AI độc lập" data-en="Independent AI Developer">Nhà phát triển AI độc lập</div>
+          <div class="exp-where" data-vi="Tự học · Hà Nội" data-en="Self-initiated · Hà Nội">Tự học · Hà Nội</div>
+          <div class="exp-desc" id="exp1-desc-text">Tự nghiên cứu và phát triển các công cụ AI cho năng suất cá nhân. Đã xây dựng thành công <strong style="color:var(--text)">Friday</strong> — một AI Agent cá nhân hoá. Đang khám phá thêm về RAG pipeline, tích hợp LLM và tự động hoá quy trình.</div>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">AI Agent</span>
+            <span class="tag">Prompt Engineering</span>
+            <span class="tag green" data-vi="Tự học" data-en="Self-driven">Tự học</span>
+          </div>
+        </div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:.1s">
+        <div class="exp-time" data-vi="2024<br>— Hiện tại" data-en="2024<br>— Present">2024<br>— Hiện tại</div>
+        <div class="exp-body">
+          <div class="exp-role" data-vi="Sinh viên — Phân tích kinh doanh" data-en="Student — Business Analytics">Sinh viên — Phân tích kinh doanh</div>
+          <div class="exp-where" data-vi="Đại học Kinh tế Quốc dân (NEU)" data-en="National Economics University (NEU)">Đại học Kinh tế Quốc dân (NEU)</div>
+          <div class="exp-desc" id="exp2-desc-text">Theo học ngành Phân tích kinh doanh với trọng tâm ra quyết định dựa trên dữ liệu. Tự hoàn thành tất cả bài tập SQL trên LeetCode và đang nâng cao kỹ năng Power BI và Python ngoài chương trình học.</div>
+          <div class="tags">
+            <span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">Python</span>
+            <span class="tag green">Business Analytics</span>
+          </div>
+        </div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:.2s">
+        <div class="exp-time">2015<br>— 2024</div>
+        <div class="exp-body">
+          <div class="exp-role" data-vi="Vận động viên bóng rổ thi đấu" data-en="Competitive Basketball Player">Vận động viên bóng rổ thi đấu</div>
+          <div class="exp-where" data-vi="Đội tuyển cấp quận · Hà Nội" data-en="District-level Team · Hà Nội">Đội tuyển cấp quận · Hà Nội</div>
+          <div class="exp-desc" id="exp3-desc-text">Tập luyện và thi đấu bóng rổ suốt chín năm, giành vị trí trong <strong style="color:var(--text)">đội tuyển đại diện quận</strong> vào lớp 9. Kinh nghiệm này rèn luyện tinh thần đồng đội, kỷ luật và kỹ năng làm việc dưới áp lực cao.</div>
+          <div class="tags">
+            <span class="tag pink" data-vi="Bóng rổ" data-en="Basketball">Bóng rổ</span>
+            <span class="tag green" data-vi="Làm việc nhóm" data-en="Teamwork">Làm việc nhóm</span>
+            <span class="tag" data-vi="Kỷ luật" data-en="Discipline">Kỷ luật</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">02</span><h2 data-vi="Kỹ năng" data-en="Skills">Kỹ năng</h2><div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="sg-title" data-vi="Dữ liệu & Phân tích" data-en="Data & Analytics">Dữ liệu & Phân tích</div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="SQL" data-en="SQL">SQL</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w=".85"></div></div></div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Power BI" data-en="Power BI">Power BI</span><span class="sk-pct">55%</span></div><div class="sk-track"><div class="sk-fill" data-w=".55"></div></div></div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Excel / Bảng tính" data-en="Excel / Spreadsheets">Excel / Bảng tính</span><span class="sk-pct">70%</span></div><div class="sk-track"><div class="sk-fill" data-w=".70"></div></div></div>
+      </div>
+      <div class="skill-group reveal" style="transition-delay:.1s">
+        <div class="sg-title" data-vi="Kỹ năng mềm" data-en="Soft Skills">Kỹ năng mềm</div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Lắng nghe chủ động" data-en="Active Listening">Lắng nghe chủ động</span><span class="sk-pct">90%</span></div><div class="sk-track"><div class="sk-fill" data-w=".90"></div></div></div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Làm việc nhóm" data-en="Team Collaboration">Làm việc nhóm</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w=".85"></div></div></div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Lập kế hoạch & Tổ chức" data-en="Planning & Organisation">Lập kế hoạch & Tổ chức</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-fill" data-w=".88"></div></div></div>
+        <div class="sk"><div class="sk-top"><span class="sk-name" data-vi="Tiếng Anh (Đọc hiểu)" data-en="English (Reading)">Tiếng Anh (Đọc hiểu)</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill" data-w=".75"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">03</span><h2 data-vi="Dự án" data-en="Projects">Dự án</h2><div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+      <div class="proj-card reveal">
+        <div class="proj-top"><div class="proj-icon">🤖</div><span class="proj-arrow">↗</span></div>
+        <div class="proj-wip" data-vi="● Đang phát triển" data-en="● In Development">● Đang phát triển</div>
+        <div class="proj-name" data-vi="Portfolio CV & AI Chatbot" data-en="Portfolio CV & AI Chatbot">Portfolio CV & AI Chatbot</div>
+        <div class="proj-desc" data-vi="Trang web CV cá nhân tích hợp chatbot AI sử dụng Groq API và kiến trúc RAG. Trợ lý được huấn luyện từ dữ liệu Obsidian để trả lời câu hỏi về chủ nhân một cách chính xác." data-en="A personal CV website integrated with an AI chatbot powered by Groq API and RAG architecture. The assistant is trained on personal data from Obsidian to answer questions about the owner accurately.">Trang web CV cá nhân tích hợp chatbot AI sử dụng Groq API và kiến trúc RAG. Trợ lý được huấn luyện từ dữ liệu Obsidian để trả lời câu hỏi về chủ nhân một cách chính xác.</div>
+        <div class="tags"><span class="tag">React</span><span class="tag">Groq API</span><span class="tag">RAG</span><span class="tag green">Vercel</span></div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:.1s">
+        <div class="proj-top"><div class="proj-icon">⚡</div><span class="proj-arrow">↗</span></div>
+        <div class="proj-name" data-vi="Friday — AI Agent cá nhân" data-en="Friday — Personal AI Agent">Friday — AI Agent cá nhân</div>
+        <div class="proj-desc" data-vi="AI Agent tự xây dựng cho tự động hoá năng suất cá nhân, lấy cảm hứng từ J.A.R.V.I.S. Xử lý các nhiệm vụ hàng ngày và trả lời câu hỏi theo ngữ cảnh cá nhân." data-en="A self-built AI Agent designed for personal productivity automation, inspired by J.A.R.V.I.S. Capable of handling daily tasks and answering contextual questions based on personal data.">AI Agent tự xây dựng cho tự động hoá năng suất cá nhân, lấy cảm hứng từ J.A.R.V.I.S. Xử lý các nhiệm vụ hàng ngày và trả lời câu hỏi theo ngữ cảnh cá nhân.</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag green">AI Agent</span><span class="tag" data-vi="Tự động hoá" data-en="Automation">Tự động hoá</span></div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:.2s">
+        <div class="proj-top"><div class="proj-icon">📊</div><span class="proj-arrow">↗</span></div>
+        <div class="proj-wip" data-vi="● Đang tiến hành" data-en="● In Progress">● Đang tiến hành</div>
+        <div class="proj-name" data-vi="Dashboard SQL & Power BI" data-en="SQL & Power BI Analytics Dashboard">Dashboard SQL & Power BI</div>
+        <div class="proj-desc" data-vi="Phân tích dữ liệu kinh doanh bằng SQL và trực quan hoá Power BI. Đã hoàn thành toàn bộ bài tập SQL trên LeetCode. Đang áp dụng vào bộ dữ liệu kinh doanh thực tế." data-en="Business data analysis using SQL and Power BI visualisation. Completed all SQL problem sets on LeetCode. Currently applying analytical skills to a real-world business dataset.">Phân tích dữ liệu kinh doanh bằng SQL và trực quan hoá Power BI. Đã hoàn thành toàn bộ bài tập SQL trên LeetCode. Đang áp dụng vào bộ dữ liệu kinh doanh thực tế.</div>
+        <div class="tags"><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag green" data-vi="Phân tích dữ liệu" data-en="Data Analysis">Phân tích dữ liệu</span></div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:.3s">
+        <div class="proj-top"><div class="proj-icon">🔭</div><span class="proj-arrow">↗</span></div>
+        <div class="proj-name" data-vi="Dự án tiếp theo — Sắp ra mắt" data-en="Next Project — TBD">Dự án tiếp theo — Sắp ra mắt</div>
+        <div class="proj-desc" data-vi="Đang lên kế hoạch cho dự án tiếp theo — có thể là ứng dụng phân tích dữ liệu kết hợp business intelligence với machine learning. Chi tiết sẽ được công bố sớm." data-en="Currently planning the next project — potentially a data analytics application combining business intelligence with machine learning. Details to be announced.">Đang lên kế hoạch cho dự án tiếp theo — có thể là ứng dụng phân tích dữ liệu kết hợp business intelligence với machine learning. Chi tiết sẽ được công bố sớm.</div>
+        <div class="tags"><span class="tag pink" data-vi="Sắp ra mắt" data-en="Coming Soon">Sắp ra mắt</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">04</span><h2 data-vi="Học vấn" data-en="Education">Học vấn</h2><div class="section-line"></div>
+    </div>
+    <div class="edu-list">
+      <div class="edu-card reveal">
+        <div class="edu-yr">2024<br>—<br>2028</div>
+        <div>
+          <div class="edu-school" data-vi="Đại học Kinh tế Quốc dân (NEU)" data-en="National Economics University (NEU)">Đại học Kinh tế Quốc dân (NEU)</div>
+          <div class="edu-deg" data-vi="Cử nhân Phân tích kinh doanh · Năm 1" data-en="Bachelor of Business Analytics · Year 1">Cử nhân Phân tích kinh doanh · Năm 1</div>
+          <div class="edu-meta">
+            <span class="edu-badge blue" data-vi="Đang theo học" data-en="Currently Enrolled">Đang theo học</span>
+            <span class="edu-badge" data-vi="Kinh tế · Dữ liệu · Kinh doanh" data-en="Economics · Data · Business">Kinh tế · Dữ liệu · Kinh doanh</span>
+          </div>
+        </div>
+      </div>
+      <div class="edu-card reveal" style="transition-delay:.1s">
+        <div class="edu-yr">2021<br>—<br>2024</div>
+        <div>
+          <div class="edu-school" data-vi="Trường THPT · Hà Nội" data-en="High School · Hà Nội">Trường THPT · Hà Nội</div>
+          <div class="edu-deg" data-vi="Tốt nghiệp THPT" data-en="Upper Secondary Certificate">Tốt nghiệp THPT</div>
+          <div class="edu-meta">
+            <span class="edu-badge" data-vi="Tốt nghiệp 2024" data-en="Graduated 2024">Tốt nghiệp 2024</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERESTS -->
+<section id="hobbies">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">05</span><h2 data-vi="Sở thích" data-en="Interests">Sở thích</h2><div class="section-line"></div>
+    </div>
+    <div class="hobbies-grid">
+      <div class="hobby-card reveal">
+        <div class="hobby-icon">🏀</div>
+        <div class="hobby-name" data-vi="Bóng rổ" data-en="Basketball">Bóng rổ</div>
+        <div class="hobby-desc" data-vi="Thi đấu 9 năm và đại diện đội tuyển quận — rèn luyện tinh thần đồng đội và kỷ luật bền vững." data-en="Competed for nine years and represented the district team — built strong teamwork and lasting discipline.">Thi đấu 9 năm và đại diện đội tuyển quận — rèn luyện tinh thần đồng đội và kỷ luật bền vững.</div>
+      </div>
+      <div class="hobby-card reveal" style="transition-delay:.08s">
+        <div class="hobby-icon">🏃</div>
+        <div class="hobby-name" data-vi="Chạy bộ" data-en="Running">Chạy bộ</div>
+        <div class="hobby-desc" data-vi="Bộ môn mới yêu thích từ khi lên đại học — dùng để tăng sự tập trung và sức bền thể chất." data-en="A newly embraced discipline since university — used for mental clarity and physical endurance.">Bộ môn mới yêu thích từ khi lên đại học — dùng để tăng sự tập trung và sức bền thể chất.</div>
+      </div>
+      <div class="hobby-card reveal" style="transition-delay:.16s">
+        <div class="hobby-icon">⚽</div>
+        <div class="hobby-name" data-vi="Bóng đá" data-en="Football">Bóng đá</div>
+        <div class="hobby-desc" data-vi="Thường xuyên chơi bóng đá và đá cầu giải trí. Cũng thích chơi PES Football như game chiến thuật." data-en="Regular recreational football and shuttlecock. Also enjoys PES Football as a strategy game.">Thường xuyên chơi bóng đá và đá cầu giải trí. Cũng thích chơi PES Football như game chiến thuật.</div>
+      </div>
+      <div class="hobby-card reveal" style="transition-delay:.24s">
+        <div class="hobby-icon">🤖</div>
+        <div class="hobby-name" data-vi="AI & Công nghệ" data-en="AI & Technology">AI & Công nghệ</div>
+        <div class="hobby-desc" data-vi="Rất đam mê AI — đang tích cực học cách xây dựng và làm chủ các công cụ và quy trình dựa trên AI." data-en="Highly enthusiastic about AI — actively learning to build and master AI-driven tools and workflows.">Rất đam mê AI — đang tích cực học cách xây dựng và làm chủ các công cụ và quy trình dựa trên AI.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-label reveal">
+      <span class="section-num">06</span><h2 data-vi="Liên hệ" data-en="Contact">Liên hệ</h2><div class="section-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-intro reveal">
+        <h3>
+          <span data-vi="Hãy cùng" data-en="Let's">Hãy cùng</span><br>
+          <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-vi="kết nối" data-en="connect">kết nối</span><br>
+          <span data-vi="nhau nhé." data-en="today.">nhau nhé.</span>
+        </h3>
+        <p data-vi="Luôn sẵn sàng cho các cơ hội thực tập, hợp tác dự án, hoặc đơn giản là trao đổi về dữ liệu, AI và phân tích kinh doanh. Xin liên hệ bất cứ lúc nào." data-en="Open to internship opportunities, collaborative projects, or simply a conversation about data, AI, or business analytics. Please feel free to reach out.">Luôn sẵn sàng cho các cơ hội thực tập, hợp tác dự án, hoặc đơn giản là trao đổi về dữ liệu, AI và phân tích kinh doanh. Xin liên hệ bất cứ lúc nào.</p>
+      </div>
+      <div class="contact-links reveal" style="transition-delay:.12s">
+        <a href="mailto:lengocminhchuong07@gmail.com" class="cl">
+          <div class="cl-icon">✉</div>
+          <div class="cl-body"><div class="cl-lbl">Email</div><div class="cl-val">lengocminhchuong07@gmail.com</div></div>
+          <span class="cl-arrow">→</span>
+        </a>
+        <a href="https://github.com/minh-chuong" target="_blank" class="cl">
+          <div class="cl-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></div>
+          <div class="cl-body"><div class="cl-lbl">GitHub</div><div class="cl-val">minh-chuong</div></div>
+          <span class="cl-arrow">→</span>
+        </a>
+        <a href="https://www.linkedin.com/in/ngocminhchuong-le-054634390/" target="_blank" class="cl">
+          <div class="cl-icon" style="font-size:13px;font-weight:700;color:var(--accent);">in</div>
+          <div class="cl-body"><div class="cl-lbl">LinkedIn</div><div class="cl-val">ngocminhchuong-le</div></div>
+          <span class="cl-arrow">→</span>
+        </a>
+        <a href="https://www.facebook.com/le.ngoc.minh.chuong" target="_blank" class="cl">
+          <div class="cl-icon">📘</div>
+          <div class="cl-body"><div class="cl-lbl">Facebook</div><div class="cl-val">le.ngoc.minh.chuong</div></div>
+          <span class="cl-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Lê Ngọc Minh Chương · 2025</span>
+  <span style="color:var(--dim)" data-vi="Được thiết kế & xây dựng với đam mê" data-en="Designed & Built with passion">Được thiết kế & xây dựng với đam mê</span>
+  <span data-vi="Được hỗ trợ bởi Groq AI ✦" data-en="Powered by Groq AI ✦">Được hỗ trợ bởi Groq AI ✦</span>
+</footer>
+</div>
+
+<!-- ═══════════ CHATBOT ═══════════ -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-avatar">MC</div>
+    <div>
+      <div class="chat-header-name" data-vi="Chat với Minh Chương" data-en="Chat with Minh Chương">Chat với Minh Chương</div>
+      <div class="chat-header-status">
+        <span class="chat-status-dot"></span>
+        <span data-vi="AI đang hoạt động" data-en="AI is active">AI đang hoạt động</span>
+      </div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">
+      <div class="msg-bubble" id="welcomeMsg">Xin chào! Tôi là trợ lý AI đại diện cho Lê Ngọc Minh Chương. Bạn có thể hỏi tôi về kỹ năng, dự án, học vấn, hoặc bất cứ điều gì về Chương nhé! 👋</div>
+    </div>
+  </div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button class="sug-btn" data-vi="Bạn biết kỹ năng gì?" data-en="What are your skills?" onclick="useSuggestion(this)">Bạn biết kỹ năng gì?</button>
+    <button class="sug-btn" data-vi="Kể về dự án của bạn" data-en="Tell me about your projects" onclick="useSuggestion(this)">Kể về dự án của bạn</button>
+    <button class="sug-btn" data-vi="Bạn học trường nào?" data-en="Where do you study?" onclick="useSuggestion(this)">Bạn học trường nào?</button>
+    <button class="sug-btn" data-vi="Sở thích của bạn là gì?" data-en="What are your interests?" onclick="useSuggestion(this)">Sở thích của bạn là gì?</button>
+  </div>
+  <div class="chat-error" id="chatError" style="display:none"></div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" rows="1" placeholder="Hỏi về Chương nhé..." data-vi-placeholder="Hỏi về Chương nhé..." data-en-placeholder="Ask about Chương..."></textarea>
+    <button class="chat-send" id="chatSend" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<button class="chat-fab" id="chatFab">
+  <span class="fab-chat">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      <circle cx="9" cy="10" r="1" fill="white" stroke="none"/>
+      <circle cx="12" cy="10" r="1" fill="white" stroke="none"/>
+      <circle cx="15" cy="10" r="1" fill="white" stroke="none"/>
+    </svg>
+  </span>
+  <span class="fab-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
+  </span>
+</button>
+
+<script type="module">
+import { RAG_DATA } from './src/rag-data.js';
+// ── CURSOR ──
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;cur.style.left=mx+'px';cur.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+// ── GLOBAL LANGUAGE TOGGLE ──
+let currentLang = 'vi';
+
+
+
+
+function setLang(lang) {
+  currentLang = lang;
+  // Toggle nav buttons
+  document.querySelectorAll('.glang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.glang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+  // All simple [data-vi] / [data-en] text elements
+  document.querySelectorAll('[data-vi]').forEach(el => {
+    const txt = lang === 'vi' ? el.dataset.vi : el.dataset.en;
+    if (txt !== undefined) el.textContent = txt;
+  });
+
+  // Elements needing innerHTML (contain <strong> or <br>)
+  const htmlEls = {
+    'hero-bio-text':   {vi:'Sinh viên năm nhất ngành <strong>Phân tích kinh doanh</strong> tại Đại học Kinh tế Quốc dân. Đam mê ứng dụng dữ liệu và AI để giải quyết các bài toán kinh doanh thực tế. Đang tích cực phát triển kỹ năng SQL, Python và Power BI song song với các dự án AI.', en:'First-year student majoring in <strong>Business Analytics</strong> at the National Economics University. Passionate about leveraging data and AI to solve real-world business problems. Actively developing skills in SQL, Python, and Power BI alongside hands-on AI projects.'},
+    'about-p1-text':   {vi:'Cá nhân có <strong>trách nhiệm cao và cam kết mạnh mẽ</strong> — đáng tin cậy trong việc thực hiện các mục tiêu đã đặt ra. Được biết đến là người lắng nghe tốt và thành viên nhóm đáng tin cậy.', en:'A highly <strong>responsible and committed</strong> individual — dependable in delivering on stated objectives. Known for being an attentive listener and a reliable team member.'},
+    'about-p2-text':   {vi:'Sở hữu <strong>kỹ năng lập kế hoạch và tổ chức</strong> mạnh mẽ với cách tiếp cận chi tiết. Đang phát triển sự tự tin trong thuyết trình đồng thời xây dựng nền tảng vững chắc về phân tích dữ liệu và AI.', en:'Possesses strong <strong>planning and organisational skills</strong> with a detail-oriented approach. Currently developing confidence in public presentations while building a solid foundation in data analytics and AI.'},
+    'about-p3-text':   {vi:'Quan tâm sâu sắc đến <strong>Trí tuệ nhân tạo</strong> — không chỉ là người dùng mà có tham vọng hiểu, xây dựng và làm chủ các giải pháp dựa trên AI.', en:'Deeply interested in <strong>Artificial Intelligence</strong> — not merely as a user but with the ambition to understand, build, and master AI-driven solutions.'},
+    'exp1-desc-text':  {vi:'Tự nghiên cứu và phát triển các công cụ AI cho năng suất cá nhân. Đã xây dựng thành công <strong style="color:var(--text)">Friday</strong> — một AI Agent cá nhân hoá. Đang khám phá thêm về RAG pipeline, tích hợp LLM và tự động hoá quy trình.', en:'Independently researched and developed AI-powered tools for personal productivity. Successfully built <strong style="color:var(--text)">Friday</strong> — a personalised AI Agent. Currently exploring RAG pipelines, LLM integration, and workflow automation.'},
+    'exp2-desc-text':  {vi:'Theo học ngành Phân tích kinh doanh với trọng tâm ra quyết định dựa trên dữ liệu. Tự hoàn thành tất cả bài tập SQL trên LeetCode và đang nâng cao kỹ năng Power BI và Python ngoài chương trình học.', en:'Pursuing a degree in Business Analytics with a focus on data-driven decision making. Independently completed all SQL challenges on LeetCode and is currently advancing skills in Power BI and Python.'},
+    'exp3-desc-text':  {vi:'Tập luyện và thi đấu bóng rổ suốt chín năm, giành vị trí trong <strong style="color:var(--text)">đội tuyển đại diện quận</strong> vào lớp 9. Kinh nghiệm này rèn luyện tinh thần đồng đội, kỷ luật và kỹ năng làm việc dưới áp lực cao.', en:'Trained and competed in basketball for nine years, earning a position on the <strong style="color:var(--text)">district representative team</strong> in Year 9. This experience cultivated strong teamwork, discipline, and high-pressure performance skills.'},
+  };
+  for (const [id, tr] of Object.entries(htmlEls)) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = lang === 'vi' ? tr.vi : tr.en;
+  }
+
+  // exp-time elements have <br> — handled via innerHTML too
+  document.querySelectorAll('.exp-time[data-vi]').forEach(el => {
+    el.innerHTML = lang === 'vi' ? el.dataset.vi : el.dataset.en;
+  });
+
+  // Textarea placeholder
+  const inp = document.getElementById('chatInput');
+  if (inp) inp.placeholder = lang === 'vi' ? 'Hỏi về Chương nhé...' : 'Ask about Chương...';
+
+  // Welcome message (only if no user messages yet)
+  const wm = document.getElementById('welcomeMsg');
+  if (wm) wm.textContent = lang === 'vi'
+    ? 'Xin chào! Tôi là trợ lý AI đại diện cho Lê Ngọc Minh Chương. Bạn có thể hỏi tôi về kỹ năng, dự án, học vấn, hoặc bất cứ điều gì về Chương nhé! 👋'
+    : "Hello! I'm the AI assistant representing Lê Ngọc Minh Chương. Feel free to ask me about his skills, projects, education, or anything about Chương! 👋";
+}
+
+// ── LANGUAGE TOGGLE (legacy — remove from skills section) ──
+function setLangLegacy(){}
+
+// ── SKILL BARS ──
+const skObs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){const w=e.target.dataset.w;e.target.style.transform=`scaleX(${w})`;e.target.style.background=`linear-gradient(90deg,var(--accent),var(--accent2))`;}});},{threshold:.1});
+document.querySelectorAll('.sk-fill').forEach(f=>skObs.observe(f));
+
+// ── REVEAL ──
+const rvObs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.08,rootMargin:'0px 0px -32px 0px'});
+document.querySelectorAll('.reveal').forEach(r=>rvObs.observe(r));
+document.querySelectorAll('#hero .reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*100+80));
+
+// ── NAV ACTIVE ──
+const secs=document.querySelectorAll('section[id]');
+const nls=document.querySelectorAll('.nav-links a');
+const nvObs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){nls.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.nav-links a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{threshold:.35});
+secs.forEach(s=>nvObs.observe(s));
+
+// ── CHATBOT ──
+const GROQ_KEY = import.meta.env.VITE_GROQ_API_KEY || "YOUR_GROQ_API_KEY_HERE";
+const RAG = RAG_DATA;
+
+let chatOpen=false;
+let history=[];
+
+const panel=document.getElementById('chatPanel');
+const fab=document.getElementById('chatFab');
+const msgs=document.getElementById('chatMessages');
+const input=document.getElementById('chatInput');
+const sendBtn=document.getElementById('chatSend');
+const errBox=document.getElementById('chatError');
+const sugs=document.getElementById('chatSuggestions');
+
+fab.addEventListener('click',()=>{
+  chatOpen=!chatOpen;
+  panel.classList.toggle('open',chatOpen);
+  fab.classList.toggle('open',chatOpen);
+  if(chatOpen) setTimeout(()=>input.focus(),280);
+});
+
+input.addEventListener('input',()=>{
+  sendBtn.disabled=!input.value.trim();
+  input.style.height='auto';
+  input.style.height=Math.min(input.scrollHeight,72)+'px';
+});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+sendBtn.addEventListener('click',send);
+
+function useSuggestion(btn){
+  input.value=btn.textContent;
+  sendBtn.disabled=false;
+  input.focus();
+  sugs.style.display='none';
+}
+
+function addMsg(role,text){
+  const d=document.createElement('div');
+  d.className=`msg ${role}`;
+  const b=document.createElement('div');
+  b.className='msg-bubble';
+  b.textContent=text;
+  d.appendChild(b);
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const d=document.createElement('div');
+  d.className='msg bot';d.id='typing';
+  d.innerHTML='<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+async function send(){
+  const text=input.value.trim();
+  if(!text) return;
+  errBox.style.display='none';
+  sugs.style.display='none';
+  input.value='';input.style.height='auto';sendBtn.disabled=true;
+
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+  showTyping();
+
+  if(GROQ_KEY==='YOUR_GROQ_API_KEY_HERE'){
+    hideTyping();
+    errBox.textContent='⚠ Vui lòng thay YOUR_GROQ_API_KEY_HERE bằng Groq API key thật.';
+    errBox.style.display='block';
+    return;
+  }
+
+  try{
+    const langHint = currentLang==='vi' ? 'Respond in Vietnamese.' : 'Respond in English.';
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${GROQ_KEY}`},
+      body:JSON.stringify({
+        model:'llama-3.3-70b-versatile',
+        max_tokens:512,
+        messages:[
+          {role:'system',content:RAG+'\n\n'+langHint},
+          ...history.slice(-10)
+        ]
+      })
+    });
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`HTTP ${res.status}`);}
+    const data=await res.json();
+    const reply=data.choices[0]?.message?.content||'Sorry, no response.';
+    hideTyping();
+    addMsg('bot',reply);
+    history.push({role:'assistant',content:reply});
+  }catch(err){
+    hideTyping();
+    errBox.textContent=`Error: ${err.message}`;
+    errBox.style.display='block';
+  }
+}
+
+// ── EXPOSE to window so onclick="" attributes work inside module script ──
+window.setLang = setLang;
+window.useSuggestion = useSuggestion;
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Những kỹ năng như thuyết trình là 1 kỹ năng mình khá tự tin cùng với đó là giao tiếp và làm việc nhóm. Ngoài ra từ hè mình đã học sơ qua về Python và trong năm mình đã luyện khá kĩ SQL và đã giải hết tất cả các câu trên leetcode cùng với đó hiện tại mình đang học thêm về Power Bi.

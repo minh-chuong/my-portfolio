@@ -1,0 +1,2 @@
+Hiện tại mình đang build 1 con AI Agent chạy local trên máy mình để làm những tác vụ tự động hóa cơ bản ban đầu như đọc mail hay xếp lịch trên gg calendar. Bên cạnh đó nó có thể trả lời các câu hỏi, tổng hợp các thông tin cho mình.
+Ngoài ra mình đang build 1 website cá nhân về mình như 1 CV của mình mà website đó sẽ có 1 con chatbot để trả lời các thông tin mà mọi người hỏi về mình
