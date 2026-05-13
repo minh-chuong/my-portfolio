@@ -2164,23 +2164,228 @@
     </div>
   </div>
 
-  <button class="chat-fab" id="chatFab">
-    <span class="fab-chat">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-        <circle cx="9" cy="10" r="1" fill="white" stroke="none" />
-        <circle cx="12" cy="10" r="1" fill="white" stroke="none" />
-        <circle cx="15" cy="10" r="1" fill="white" stroke="none" />
-      </svg>
-    </span>
-    <span class="fab-close">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"
-        stroke-linecap="round">
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
-    </span>
+  <style>
+    .chat-fab {
+      position: fixed !important;
+      bottom: 22px !important;
+      right: 22px !important;
+      z-index: 9000;
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 0;
+      width: auto !important;
+      height: auto !important;
+      border-radius: 0 !important;
+    }
+
+    .chat-fab:hover {
+      transform: none !important;
+    }
+
+    .pix-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.22));
+    }
+
+    .pix-label {
+      font-family: var(--font-body, 'Inter', sans-serif);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-dark-charcoal, #171717);
+      background: var(--color-canvas-white, #fff);
+      border: 1px solid var(--color-steel-gray, #dee2de);
+      border-radius: 20px;
+      padding: 3px 10px;
+      margin-bottom: 6px;
+      box-shadow: var(--sh-nav, rgba(0, 0, 0, 0.15) 0px 2px 6px 0px);
+      white-space: nowrap;
+      animation: fadein .5s ease both;
+    }
+
+    .pix-canvas-wrap {
+      animation: pixfloat 3s ease-in-out infinite;
+      transition: transform .15s ease;
+    }
+
+    .chat-fab:hover .pix-canvas-wrap {
+      transform: scale(1.08);
+    }
+
+    .chat-fab:active .pix-canvas-wrap {
+      transform: scale(0.94);
+    }
+
+    canvas#pixBoy {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+    }
+
+    /* Close X — shown when panel is open */
+    .pix-close {
+      display: none;
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 18px;
+      height: 18px;
+      background: var(--color-dark-charcoal, #171717);
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .chat-fab.open .pix-label {
+      display: none;
+    }
+
+    .chat-fab.open .pix-close {
+      display: flex;
+    }
+
+    @keyframes pixfloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+  <button class="chat-fab" id="chatFab" aria-label="Chat với Minh Chương">
+    <div class="pix-label">Chat with me</div>
+    <div class="pix-canvas-wrap" style="position:relative;">
+      <canvas id="pixBoy" width="64" height="80"></canvas>
+      <div class="pix-close" id="pixClose">✕</div>
+    </div>
   </button>
+
+  <script>
+    /* ── Pixel boy animation ── */
+    (function () {
+      const C = document.getElementById('pixBoy');
+      if (!C) return;
+      const ctx = C.getContext('2d');
+      const S = 4;
+      C.width = 16 * S; C.height = 20 * S;
+      C.style.width = (16 * S) + 'px'; C.style.height = (20 * S) + 'px';
+
+      const _ = null;
+      const SKIN = '#f5c5a3', HAIR = '#2c1810', EYE = '#1a1a2e', WHT = '#ffffff';
+      const SHIRT = '#0081c0', PANT = '#1f1f29', SHOE = '#2c2c2c', BLUSH = '#f9a8a8';
+
+      const BODY = [
+        [_, _, _, _, _, HAIR, HAIR, HAIR, HAIR, HAIR, HAIR, _, _, _, _, _],
+        [_, _, _, _, HAIR, HAIR, HAIR, HAIR, HAIR, HAIR, HAIR, HAIR, _, _, _, _],
+        [_, _, _, HAIR, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, HAIR, _, _, _],
+        [_, _, _, HAIR, SKIN, EYE, SKIN, SKIN, SKIN, SKIN, EYE, SKIN, HAIR, _, _, _],
+        [_, _, _, HAIR, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, HAIR, _, _, _],
+        [_, _, _, _, SKIN, BLUSH, SKIN, WHT, WHT, SKIN, BLUSH, SKIN, _, _, _, _],
+        [_, _, _, _, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, _, _, _, _],
+        [_, _, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, _, _],
+        [_, _, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, _, _],
+        [_, _, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, _, _],
+        [_, _, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, SHIRT, _, _],
+        [_, _, SHIRT, SHIRT, PANT, PANT, PANT, PANT, PANT, PANT, PANT, PANT, SHIRT, SHIRT, _, _],
+        [_, _, SKIN, _, PANT, PANT, PANT, PANT, PANT, PANT, PANT, PANT, _, SKIN, _, _],
+        [_, _, _, _, PANT, PANT, PANT, _, _, PANT, PANT, PANT, _, _, _, _],
+        [_, _, _, _, PANT, PANT, PANT, _, _, PANT, PANT, PANT, _, _, _, _],
+        [_, _, _, _, PANT, PANT, PANT, _, _, PANT, PANT, PANT, _, _, _, _],
+        [_, _, _, _, SHOE, SHOE, SHOE, _, _, SHOE, SHOE, SHOE, _, _, _, _],
+        [_, _, _, _, SHOE, SHOE, SHOE, SHOE, SHOE, SHOE, SHOE, SHOE, _, _, _, _],
+      ];
+
+      const BLINK_ROWS = [
+        [_, _, _, HAIR, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, SKIN, HAIR, _, _, _],
+        [_, _, _, HAIR, SKIN, EYE, EYE, SKIN, SKIN, EYE, EYE, SKIN, HAIR, _, _, _],
+      ];
+
+      const ARMS = [
+        /* down */
+        [[SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT],
+        [SKIN, _, _, _, _, _, _, _, _, _, _, _, _, _, _, SKIN],
+        [SKIN, _, _, _, _, _, _, _, _, _, _, _, _, _, _, SKIN]],
+        /* wave mid */
+        [[SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _, _],
+        [SKIN, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]],
+        /* wave up */
+        [[SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT, _, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _, _, _],
+        [SKIN, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]],
+        /* wave mid again */
+        [[SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _],
+        [SHIRT, _, _, _, _, _, _, _, _, _, _, _, SHIRT, SKIN, _, _],
+        [SKIN, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]],
+      ];
+      const ARM_START_ROW = 7;
+
+      function draw(blinkOn, armIdx) {
+        ctx.clearRect(0, 0, C.width, C.height);
+        const rows = BODY.map(r => [...r]);
+        if (blinkOn) { rows[3] = BLINK_ROWS[0]; rows[4] = BLINK_ROWS[1]; }
+        for (let r = 0; r < rows.length; r++)
+          for (let c = 0; c < rows[r].length; c++) {
+            if (rows[r][c]) { ctx.fillStyle = rows[r][c]; ctx.fillRect(c * S, r * S, S, S); }
+          }
+        const arm = ARMS[armIdx];
+        for (let r = 0; r < arm.length; r++)
+          for (let c = 0; c < arm[r].length; c++) {
+            if (arm[r][c]) { ctx.fillStyle = arm[r][c]; ctx.fillRect(c * S, (ARM_START_ROW + r) * S, S, S); }
+          }
+      }
+
+      let frame = 0, blinkT = 0, blinkOn = false;
+      function loop() {
+        frame++; blinkT++;
+        if (blinkT === 70) { blinkOn = true; }
+        if (blinkT === 75) { blinkOn = false; blinkT = 0; }
+        draw(blinkOn, Math.floor((frame / 16) % 4));
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+  </script>
+
 
   <!-- ═══════ SCRIPT ═══════ -->
   <script type="module">
