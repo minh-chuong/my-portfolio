@@ -625,12 +625,24 @@
     /* ═══════════════════════════════════════
    ABOUT
 ═══════════════════════════════════════ */
-    .ab-grid {
+    .ab-top {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 200px 1fr;
       gap: var(--s16);
+      margin-bottom: var(--s16);
     }
-
+    .ab-photo-card {
+      background: var(--color-off-white);
+      border-radius: var(--r-card-sm);
+      box-shadow: var(--sh-card);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+    .ab-photo-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+    }
     /* Elevated Content Card — bg:#fefffc, r:12px, sh-card */
     .ab-card {
       background: var(--color-off-white);
@@ -638,7 +650,6 @@
       padding: var(--s24);
       box-shadow: var(--sh-card);
     }
-
     .ab-lbl {
       font-size: 11px;
       font-weight: 600;
@@ -647,7 +658,6 @@
       color: var(--color-medium-gray);
       margin-bottom: var(--s16);
     }
-
     .ab-card p {
       font-size: 14px;
       font-weight: 400;
@@ -655,14 +665,22 @@
       letter-spacing: -0.01em;
       color: var(--color-slate-gray);
     }
-
     .ab-card p strong {
       color: var(--color-dark-charcoal);
       font-weight: 600;
     }
-
-    .ab-card p+p {
-      margin-top: var(--s16);
+    .ab-card p+p { margin-top: var(--s16); }
+    /* Contact card bottom — horizontal 3-col grid */
+    .ab-contact-card {
+      background: var(--color-off-white);
+      border-radius: var(--r-card-sm);
+      padding: var(--s24);
+      box-shadow: var(--sh-card);
+    }
+    .info-rows-h {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s12) var(--s24);
     }
 
     .info-rows {
@@ -1636,6 +1654,8 @@
       }
 
       .ab-grid,
+      .ab-top,
+      .info-rows-h,
       .sk-grid,
       .proj-grid,
       .int-grid,
@@ -1765,8 +1785,15 @@
         <div class="sl" data-vi="00 — Giới thiệu" data-en="00 — About">00 — Giới thiệu</div>
         <div class="st" data-vi="Con người tôi" data-en="About Me">Con người tôi</div>
       </div>
-      <div class="ab-grid">
-        <div class="ab-card reveal">
+
+      <!-- Top row: Photo | Profile text -->
+      <div class="ab-top">
+        <!-- Ảnh profile bên trái -->
+        <div class="ab-photo-card reveal">
+          <img src="/profile-photo.jpg" alt="Lê Ngọc Minh Chương" />
+        </div>
+        <!-- Hồ sơ cá nhân bên phải -->
+        <div class="ab-card reveal" style="transition-delay:.1s">
           <div class="ab-lbl" data-vi="Hồ sơ cá nhân" data-en="Profile">Hồ sơ cá nhân</div>
           <p id="about-p1-text">Cá nhân có <strong>trách nhiệm cao và cam kết mạnh mẽ</strong> — đáng tin cậy trong việc
             thực hiện các mục tiêu đã đặt ra. Được biết đến là người lắng nghe tốt và thành viên nhóm đáng tin cậy.</p>
@@ -1776,38 +1803,41 @@
           <p id="about-p3-text">Quan tâm sâu sắc đến <strong>Trí tuệ nhân tạo</strong> — không chỉ là người dùng mà có
             tham vọng hiểu, xây dựng và làm chủ các giải pháp dựa trên AI.</p>
         </div>
-        <div class="ab-card reveal" style="transition-delay:.1s">
-          <div class="ab-lbl" data-vi="Thông tin liên hệ" data-en="Contact Information">Thông tin liên hệ</div>
-          <div class="info-rows">
-            <div class="info-row">
-              <div class="iico">📍</div><span class="ilbl" data-vi="Địa chỉ" data-en="Location">Địa chỉ</span><span
-                class="ival">Cầu Giấy, Hà Nội</span>
-            </div>
-            <div class="info-row">
-              <div class="iico">📞</div><span class="ilbl" data-vi="Điện thoại" data-en="Phone">Điện thoại</span><span
-                class="ival">0961 097 090</span>
-            </div>
-            <div class="info-row">
-              <div class="iico">✉️</div><span class="ilbl">Email</span><span class="ival"><a
-                  href="mailto:lengocminhchuong07@gmail.com">lengocminhchuong07@gmail.com</a></span>
-            </div>
-            <div class="info-row">
-              <div class="iico">⌨️</div><span class="ilbl">GitHub</span><span class="ival"><a
-                  href="https://github.com/minh-chuong" target="_blank">minh-chuong</a></span>
-            </div>
-            <div class="info-row">
-              <div class="iico" style="font-size:10px;font-weight:700;color:var(--color-cofounder-blue);">in</div><span
-                class="ilbl">LinkedIn</span><span class="ival"><a
-                  href="https://www.linkedin.com/in/ngocminhchuong-le-054634390/"
-                  target="_blank">ngocminhchuong-le</a></span>
-            </div>
-            <div class="info-row">
-              <div class="iico">📘</div><span class="ilbl">Facebook</span><span class="ival"><a
-                  href="https://www.facebook.com/le.ngoc.minh.chuong" target="_blank">le.ngoc.minh.chuong</a></span>
-            </div>
+      </div>
+
+      <!-- Bottom row: Thông tin liên hệ full width -->
+      <div class="ab-contact-card reveal" style="transition-delay:.15s">
+        <div class="ab-lbl" data-vi="Thông tin liên hệ" data-en="Contact Information">Thông tin liên hệ</div>
+        <div class="info-rows-h">
+          <div class="info-row">
+            <div class="iico">📍</div><span class="ilbl" data-vi="Địa chỉ" data-en="Location">Địa chỉ</span><span
+              class="ival">Cầu Giấy, Hà Nội</span>
+          </div>
+          <div class="info-row">
+            <div class="iico">📞</div><span class="ilbl" data-vi="Điện thoại" data-en="Phone">Điện thoại</span><span
+              class="ival">0961 097 090</span>
+          </div>
+          <div class="info-row">
+            <div class="iico">✉️</div><span class="ilbl">Email</span><span class="ival"><a
+                href="mailto:lengocminhchuong07@gmail.com">lengocminhchuong07@gmail.com</a></span>
+          </div>
+          <div class="info-row">
+            <div class="iico">⌨️</div><span class="ilbl">GitHub</span><span class="ival"><a
+                href="https://github.com/minh-chuong" target="_blank">minh-chuong</a></span>
+          </div>
+          <div class="info-row">
+            <div class="iico" style="font-size:10px;font-weight:700;color:var(--color-cofounder-blue);">in</div><span
+              class="ilbl">LinkedIn</span><span class="ival"><a
+                href="https://www.linkedin.com/in/ngocminhchuong-le-054634390/"
+                target="_blank">ngocminhchuong-le</a></span>
+          </div>
+          <div class="info-row">
+            <div class="iico">📘</div><span class="ilbl">Facebook</span><span class="ival"><a
+                href="https://www.facebook.com/le.ngoc.minh.chuong" target="_blank">le.ngoc.minh.chuong</a></span>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
