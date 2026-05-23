@@ -1835,39 +1835,6 @@
         </div>
       </div>
 
-      <!-- Bottom row: Thông tin liên hệ full width -->
-      <div class="ab-contact-card reveal" style="transition-delay:.15s">
-        <div class="ab-lbl" data-vi="Thông tin liên hệ" data-en="Contact Information">Thông tin liên hệ</div>
-        <div class="info-rows-h">
-          <div class="info-row">
-            <div class="iico">📍</div><span class="ilbl" data-vi="Địa chỉ" data-en="Location">Địa chỉ</span><span
-              class="ival">Cầu Giấy, Hà Nội</span>
-          </div>
-          <div class="info-row">
-            <div class="iico">📞</div><span class="ilbl" data-vi="Điện thoại" data-en="Phone">Điện thoại</span><span
-              class="ival">0961 097 090</span>
-          </div>
-          <div class="info-row">
-            <div class="iico">✉️</div><span class="ilbl">Email</span><span class="ival"><a
-                href="mailto:lengocminhchuong07@gmail.com">lengocminhchuong07@gmail.com</a></span>
-          </div>
-          <div class="info-row">
-            <div class="iico">⌨️</div><span class="ilbl">GitHub</span><span class="ival"><a
-                href="https://github.com/minh-chuong" target="_blank">minh-chuong</a></span>
-          </div>
-          <div class="info-row">
-            <div class="iico" style="font-size:10px;font-weight:700;color:var(--color-cofounder-blue);">in</div><span
-              class="ilbl">LinkedIn</span><span class="ival"><a
-                href="https://www.linkedin.com/in/ngocminhchuong-le-054634390/"
-                target="_blank">ngocminhchuong-le</a></span>
-          </div>
-          <div class="info-row">
-            <div class="iico">📘</div><span class="ilbl">Facebook</span><span class="ival"><a
-                href="https://www.facebook.com/le.ngoc.minh.chuong" target="_blank">le.ngoc.minh.chuong</a></span>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -2189,6 +2156,14 @@
             </div>
             <span class="cl-arr">→</span>
           </a>
+          <a href="tel:0961097090" class="cl">
+            <div class="cl-ico">📞</div>
+            <div class="cl-body">
+              <div class="cl-lbl" data-vi="Điện thoại" data-en="Phone">Điện thoại</div>
+              <div class="cl-val">0961 097 090</div>
+            </div>
+            <span class="cl-arr">→</span>
+          </a>
         </div>
       </div>
     </div>
@@ -2207,16 +2182,14 @@
     <div class="chat-hd">
       <div class="chat-av">MC</div>
       <div>
-        <div class="chat-hd-name" data-vi="Chat với Minh Chương" data-en="Chat with Minh Chương">Chat với Minh Chương
-        </div>
-        <div class="chat-hd-st"><span class="chat-sdot"></span><span data-vi="AI đang hoạt động"
-            data-en="AI is active">AI đang hoạt động</span></div>
+        <div class="chat-hd-name" data-vi="Chat với Minh Chương" data-en="Chat with Minh Chương">Chat với Minh Chương</div>
+        <div class="chat-hd-st"><span class="chat-sdot"></span><span data-vi="AI đang hoạt động" data-en="AI is active">AI đang hoạt động</span></div>
       </div>
+      <button class="chat-close-btn" id="chatCloseBtn" aria-label="Đóng chat">✕</button>
     </div>
     <div class="chat-msgs" id="chatMessages">
       <div class="msg bot">
-        <div class="msg-b" id="welcomeMsg">Xin chào! Tôi là trợ lý AI đại diện cho Lê Ngọc Minh Chương. Bạn có thể hỏi
-          về kỹ năng, dự án, học vấn hoặc bất cứ điều gì về Chương nhé! 👋</div>
+        <div class="msg-b" id="welcomeMsg">Xin chào! Tôi là trợ lý AI đại diện cho Lê Ngọc Minh Chương. Bạn có thể hỏi về kỹ năng, dự án, học vấn hoặc bất cứ điều gì về Chương nhé! 👋</div>
       </div>
     </div>
     <div class="chat-sugs" id="chatSuggestions">
@@ -2261,17 +2234,7 @@
       border-radius: 0 !important;
     }
 
-    .chat-fab:hover {
-      transform: none !important;
-    }
-
-    .pix-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.22));
-    }
+    .chat-fab:hover { transform: none !important; }
 
     .pix-label {
       font-family: var(--font-body, 'Inter', sans-serif);
@@ -2285,23 +2248,23 @@
       border-radius: 20px;
       padding: 3px 10px;
       margin-bottom: 6px;
-      box-shadow: var(--sh-nav, rgba(0, 0, 0, 0.15) 0px 2px 6px 0px);
+      box-shadow: rgba(0,0,0,0.15) 0px 2px 6px 0px;
       white-space: nowrap;
       animation: fadein .5s ease both;
+      transition: opacity .2s;
     }
 
     .pix-canvas-wrap {
       animation: pixfloat 3s ease-in-out infinite;
-      transition: transform .15s ease;
+      transition: transform .15s ease, opacity .2s;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.22));
     }
 
-    .chat-fab:hover .pix-canvas-wrap {
-      transform: scale(1.08);
-    }
+    .chat-fab:hover .pix-canvas-wrap { transform: scale(1.08); }
+    .chat-fab:active .pix-canvas-wrap { transform: scale(0.94); }
 
-    .chat-fab:active .pix-canvas-wrap {
-      transform: scale(0.94);
-    }
+    /* Khi mở chat → ẩn hoàn toàn pixel boy + label */
+    .chat-fab.open { pointer-events: none; opacity: 0; }
 
     canvas#pixBoy {
       image-rendering: pixelated;
@@ -2309,53 +2272,42 @@
       display: block;
     }
 
-    /* Close X — shown when panel is open */
-    .pix-close {
-      display: none;
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      width: 18px;
-      height: 18px;
-      background: var(--color-dark-charcoal, #171717);
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
+    /* Nút đóng X trong chat header */
+    .chat-close-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.5);
+      font-size: 18px;
       line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: color .15s;
+      flex-shrink: 0;
     }
-
-    .chat-fab.open .pix-label {
-      display: none;
-    }
-
-    .chat-fab.open .pix-close {
-      display: flex;
-    }
+    .chat-close-btn:hover { color: rgba(255,255,255,0.9); }
 
     @keyframes pixfloat {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-5px);
-      }
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes fadein {
-      from {
-        opacity: 0;
-        transform: translateY(4px);
+    /* Mobile — giữ popup góc phải, chỉ thu nhỏ pixel boy */
+    @media (max-width: 768px) {
+      .chat-fab {
+        bottom: 16px !important;
+        right: 16px !important;
       }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      .pix-label { font-size: 10px; padding: 2px 8px; margin-bottom: 4px; }
+      canvas#pixBoy { width: 48px !important; height: 60px !important; }
+      .chat-panel {
+        width: 300px !important;
+        max-width: calc(100vw - 32px) !important;
       }
     }
   </style>
@@ -2364,7 +2316,6 @@
     <div class="pix-label">Chat with me</div>
     <div class="pix-canvas-wrap" style="position:relative;">
       <canvas id="pixBoy" width="64" height="80"></canvas>
-      <div class="pix-close" id="pixClose">✕</div>
     </div>
   </button>
 
@@ -2626,6 +2577,12 @@
       if (chatOpen) setTimeout(() => input.focus(), 220);
     });
 
+    document.getElementById('chatCloseBtn').addEventListener('click', () => {
+      chatOpen = false;
+      panel.classList.remove('open');
+      fab.classList.remove('open');
+    });
+
     input.addEventListener('input', () => {
       sendBtn.disabled = !input.value.trim();
       input.style.height = 'auto';
@@ -2663,80 +2620,34 @@
       d.className = 'msg bot confirm-row';
       const safeQ = originalQuestion.replace(/'/g, "\\'").replace(/"/g, '&quot;');
       d.innerHTML = `
-        <button class="confirm-btn yes" onclick="sendConfirm(true,'${safeQ}',this.closest('.confirm-row'))">✓ Có, gửi câu hỏi</button>
-        <button class="confirm-btn no"  onclick="sendConfirm(false,'',this.closest('.confirm-row'))">✕ Không cần</button>
+        <button class="confirm-btn yes" onclick="sendConfirm(true, '${safeQ}', this.closest('.confirm-row'))">✓ Có, gửi câu hỏi</button>
+        <button class="confirm-btn no"  onclick="sendConfirm(false, '', this.closest('.confirm-row'))">✕ Không cần</button>
       `;
       msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function sendConfirm(agreed, question, btnRow) {
+    async function sendConfirm(agreed, question, btnRow) {
       if (btnRow) btnRow.remove();
       if (!agreed) {
         addMsg('bot', 'Được rồi! Nếu có câu hỏi khác thì cứ hỏi nhé 😊');
         return;
       }
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedEmail) {
-        doSendEmail(question, savedEmail);
-      } else {
-        showEmailInput(question);
-      }
-    }
-    window.sendConfirm = sendConfirm;
-
-    function showEmailInput(question) {
-      const safeQ = question.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-      const d = document.createElement('div');
-      d.className = 'msg bot';
-      d.innerHTML = `
-        <div class="msg-b" style="display:flex;flex-direction:column;gap:8px;max-width:100%">
-          <span>Bạn cho mình xin email để Chương có thể phản hồi nhé!</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <input id="emailInput" type="email" placeholder="email@example.com"
-              style="flex:1;padding:7px 10px;border:1px solid var(--color-steel-gray);border-radius:var(--r-btn);font-size:13px;font-family:var(--font-body);outline:none;background:var(--color-ash-gray);color:var(--color-dark-charcoal);transition:border-color .15s"
-              onkeydown="if(event.key==='Enter'){submitEmail('${safeQ}',this.value,this.closest('.msg'))}"
-              onfocus="this.style.borderColor='var(--color-action-azure)'"
-              onblur="this.style.borderColor='var(--color-steel-gray)'"
-            />
-            <button class="confirm-btn yes" style="white-space:nowrap;flex-shrink:0"
-              onclick="submitEmail('${safeQ}',document.getElementById('emailInput').value,this.closest('.msg'))">Gửi →</button>
-          </div>
-        </div>
-      `;
-      msgs.appendChild(d);
-      msgs.scrollTop = msgs.scrollHeight;
-      setTimeout(() => document.getElementById('emailInput')?.focus(), 100);
-    }
-    window.showEmailInput = showEmailInput;
-
-    function submitEmail(question, email, msgEl) {
-      if (!email || !email.includes('@') || !email.includes('.')) {
-        const inp = document.getElementById('emailInput');
-        if (inp) { inp.style.borderColor = '#ef4444'; inp.placeholder = 'Email không hợp lệ, thử lại!'; inp.value = ''; }
-        return;
-      }
-      localStorage.setItem('userEmail', email);
-      if (msgEl) msgEl.remove();
-      doSendEmail(question, email);
-    }
-    window.submitEmail = submitEmail;
-
-    async function doSendEmail(question, email) {
-      addMsg('user', `Gửi câu hỏi (${email})`);
+      addMsg('user', 'Có, gửi câu hỏi');
       showTyping();
       try {
         await fetch(N8N_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sendEmail: true, message: question, userEmail: email, lang: currentLang })
+          body: JSON.stringify({ message: question, sendEmail: true, lang: currentLang })
         });
         hideTyping();
-        addMsg('bot', 'Đã gửi câu hỏi đến Chương rồi! Bạn sẽ nhận được phản hồi qua email sớm nhé 📧');
+        addMsg('bot', 'Đã gửi câu hỏi đến Chương rồi! Bạn sẽ nhận được phản hồi sớm nhé 📧');
       } catch (err) {
         hideTyping();
         addMsg('bot', 'Có lỗi khi gửi, bạn thử lại sau nhé!');
       }
     }
+    window.sendConfirm = sendConfirm;
 
     async function send() {
       const text = input.value.trim(); if (!text) return;
