@@ -1292,6 +1292,36 @@
       color: var(--color-action-azure);
     }
 
+    /* Confirm buttons — Có/Không */
+    .confirm-row {
+      display: flex !important;
+      gap: var(--s8);
+      align-items: center;
+      padding: 2px 0;
+    }
+    .confirm-btn {
+      padding: 7px 14px;
+      border-radius: var(--r-btn);
+      font-size: 12px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      border: 1px solid;
+      transition: opacity .15s;
+    }
+    .confirm-btn:hover { opacity: .78; }
+    .confirm-btn.yes {
+      background: var(--color-cofounder-blue);
+      color: var(--color-canvas-white);
+      border-color: var(--color-cofounder-blue);
+    }
+    .confirm-btn.no {
+      background: transparent;
+      color: var(--color-slate-gray);
+      border-color: var(--color-steel-gray);
+    }
+
     /* ═══════════════════════════════════════
    CHATBOT
 ═══════════════════════════════════════ */
@@ -2435,8 +2465,7 @@
 
 
   <!-- ═══════ SCRIPT ═══════ -->
-  <script type="module">
-    import { RAG_DATA } from './src/rag-data.js';
+  <script>
 
     /* ── REVEAL on scroll ── */
     const rvObs = new IntersectionObserver(
@@ -2578,18 +2607,17 @@
     }
     window.setLang = setLang;
 
-    /* ── CHATBOT ── */
-    const GROQ_KEY = import.meta.env.VITE_GROQ_API_KEY;
-    const RAG = RAG_DATA;
+    /* ── CHATBOT — n8n webhook ── */
+    const N8N_URL = 'https://n8n.yecneu.com/webhook/portfolio-chat';
     let chatOpen = false, history = [];
 
-    const panel = document.getElementById('chatPanel');
-    const fab = document.getElementById('chatFab');
-    const msgs = document.getElementById('chatMessages');
-    const input = document.getElementById('chatInput');
+    const panel   = document.getElementById('chatPanel');
+    const fab     = document.getElementById('chatFab');
+    const msgs    = document.getElementById('chatMessages');
+    const input   = document.getElementById('chatInput');
     const sendBtn = document.getElementById('chatSend');
-    const errBox = document.getElementById('chatError');
-    const sugs = document.getElementById('chatSuggestions');
+    const errBox  = document.getElementById('chatError');
+    const sugs    = document.getElementById('chatSuggestions');
 
     fab.addEventListener('click', () => {
       chatOpen = !chatOpen;
@@ -2630,6 +2658,40 @@
     }
     function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
+    function showConfirm(originalQuestion) {
+      const d = document.createElement('div');
+      d.className = 'msg bot confirm-row';
+      const safeQ = originalQuestion.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      d.innerHTML = `
+        <button class="confirm-btn yes" onclick="sendConfirm(true, '${safeQ}', this.closest('.confirm-row'))">✓ Có, gửi câu hỏi</button>
+        <button class="confirm-btn no"  onclick="sendConfirm(false, '', this.closest('.confirm-row'))">✕ Không cần</button>
+      `;
+      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    async function sendConfirm(agreed, question, btnRow) {
+      if (btnRow) btnRow.remove();
+      if (!agreed) {
+        addMsg('bot', 'Được rồi! Nếu có câu hỏi khác thì cứ hỏi nhé 😊');
+        return;
+      }
+      addMsg('user', 'Có, gửi câu hỏi');
+      showTyping();
+      try {
+        await fetch(N8N_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: question, sendEmail: true, lang: currentLang })
+        });
+        hideTyping();
+        addMsg('bot', 'Đã gửi câu hỏi đến Chương rồi! Bạn sẽ nhận được phản hồi sớm nhé 📧');
+      } catch (err) {
+        hideTyping();
+        addMsg('bot', 'Có lỗi khi gửi, bạn thử lại sau nhé!');
+      }
+    }
+    window.sendConfirm = sendConfirm;
+
     async function send() {
       const text = input.value.trim(); if (!text) return;
       errBox.style.display = 'none'; sugs.style.display = 'none';
@@ -2638,35 +2700,27 @@
       history.push({ role: 'user', content: text });
       showTyping();
 
-      if (!GROQ_KEY || GROQ_KEY === 'your_groq_key_here') {
-        hideTyping();
-        errBox.textContent = '⚠ Chưa cấu hình Groq API key. Vui lòng thêm VITE_GROQ_API_KEY vào Vercel.';
-        errBox.style.display = 'block';
-        return;
-      }
-
       try {
-        const hint = currentLang === 'vi' ? 'Respond in Vietnamese.' : 'Respond in English.';
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        const res = await fetch(N8N_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            max_tokens: 512,
-            messages: [
-              { role: 'system', content: RAG + '\n\n' + hint },
-              ...history.slice(-10)
-            ]
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, lang: currentLang })
         });
-        if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `HTTP ${res.status}`); }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const reply = data.choices[0]?.message?.content || 'Sorry, no response.';
-        hideTyping(); addMsg('bot', reply);
-        history.push({ role: 'assistant', content: reply });
+        hideTyping();
+
+        if (data.confirm) {
+          addMsg('bot', data.reply);
+          showConfirm(text);
+        } else {
+          const reply = data.reply || 'Xin lỗi, không có phản hồi.';
+          addMsg('bot', reply);
+          history.push({ role: 'assistant', content: reply });
+        }
       } catch (err) {
         hideTyping();
-        errBox.textContent = `Error: ${err.message}`;
+        errBox.textContent = `Lỗi kết nối: ${err.message}`;
         errBox.style.display = 'block';
       }
     }
