@@ -2663,34 +2663,80 @@
       d.className = 'msg bot confirm-row';
       const safeQ = originalQuestion.replace(/'/g, "\\'").replace(/"/g, '&quot;');
       d.innerHTML = `
-        <button class="confirm-btn yes" onclick="sendConfirm(true, '${safeQ}', this.closest('.confirm-row'))">✓ Có, gửi câu hỏi</button>
-        <button class="confirm-btn no"  onclick="sendConfirm(false, '', this.closest('.confirm-row'))">✕ Không cần</button>
+        <button class="confirm-btn yes" onclick="sendConfirm(true,'${safeQ}',this.closest('.confirm-row'))">✓ Có, gửi câu hỏi</button>
+        <button class="confirm-btn no"  onclick="sendConfirm(false,'',this.closest('.confirm-row'))">✕ Không cần</button>
       `;
       msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
     }
 
-    async function sendConfirm(agreed, question, btnRow) {
+    function sendConfirm(agreed, question, btnRow) {
       if (btnRow) btnRow.remove();
       if (!agreed) {
         addMsg('bot', 'Được rồi! Nếu có câu hỏi khác thì cứ hỏi nhé 😊');
         return;
       }
-      addMsg('user', 'Có, gửi câu hỏi');
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedEmail) {
+        doSendEmail(question, savedEmail);
+      } else {
+        showEmailInput(question);
+      }
+    }
+    window.sendConfirm = sendConfirm;
+
+    function showEmailInput(question) {
+      const safeQ = question.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const d = document.createElement('div');
+      d.className = 'msg bot';
+      d.innerHTML = `
+        <div class="msg-b" style="display:flex;flex-direction:column;gap:8px;max-width:100%">
+          <span>Bạn cho mình xin email để Chương có thể phản hồi nhé!</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input id="emailInput" type="email" placeholder="email@example.com"
+              style="flex:1;padding:7px 10px;border:1px solid var(--color-steel-gray);border-radius:var(--r-btn);font-size:13px;font-family:var(--font-body);outline:none;background:var(--color-ash-gray);color:var(--color-dark-charcoal);transition:border-color .15s"
+              onkeydown="if(event.key==='Enter'){submitEmail('${safeQ}',this.value,this.closest('.msg'))}"
+              onfocus="this.style.borderColor='var(--color-action-azure)'"
+              onblur="this.style.borderColor='var(--color-steel-gray)'"
+            />
+            <button class="confirm-btn yes" style="white-space:nowrap;flex-shrink:0"
+              onclick="submitEmail('${safeQ}',document.getElementById('emailInput').value,this.closest('.msg'))">Gửi →</button>
+          </div>
+        </div>
+      `;
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(() => document.getElementById('emailInput')?.focus(), 100);
+    }
+    window.showEmailInput = showEmailInput;
+
+    function submitEmail(question, email, msgEl) {
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        const inp = document.getElementById('emailInput');
+        if (inp) { inp.style.borderColor = '#ef4444'; inp.placeholder = 'Email không hợp lệ, thử lại!'; inp.value = ''; }
+        return;
+      }
+      localStorage.setItem('userEmail', email);
+      if (msgEl) msgEl.remove();
+      doSendEmail(question, email);
+    }
+    window.submitEmail = submitEmail;
+
+    async function doSendEmail(question, email) {
+      addMsg('user', `Gửi câu hỏi (${email})`);
       showTyping();
       try {
         await fetch(N8N_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: question, sendEmail: true, lang: currentLang })
+          body: JSON.stringify({ sendEmail: true, message: question, userEmail: email, lang: currentLang })
         });
         hideTyping();
-        addMsg('bot', 'Đã gửi câu hỏi đến Chương rồi! Bạn sẽ nhận được phản hồi sớm nhé 📧');
+        addMsg('bot', 'Đã gửi câu hỏi đến Chương rồi! Bạn sẽ nhận được phản hồi qua email sớm nhé 📧');
       } catch (err) {
         hideTyping();
         addMsg('bot', 'Có lỗi khi gửi, bạn thử lại sau nhé!');
       }
     }
-    window.sendConfirm = sendConfirm;
 
     async function send() {
       const text = input.value.trim(); if (!text) return;
