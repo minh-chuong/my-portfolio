@@ -293,10 +293,10 @@
 ═══════════════════════════════════════ */
     #hero {
       min-height: 100vh;
-      background: url('/city-night-bg.jpg') center center / cover no-repeat;
+      background: #000;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: center;
       text-align: center;
       padding: 0;
@@ -304,224 +304,49 @@
       overflow: hidden;
     }
 
-    /* Video background */
-    .hero-video {
+    /* Particle canvas */
+    #particleCanvas {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Dark overlay for text readability */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom,
-          rgba(10, 10, 25, 0.35) 0%,
-          rgba(10, 10, 25, 0.10) 40%,
-          rgba(10, 10, 25, 0.05) 60%,
-          rgba(10, 10, 25, 0.50) 100%);
-      pointer-events: none;
       z-index: 1;
+      pointer-events: none;
     }
 
-    /* Ambient glow */
-    #hero::after {
-      content: '';
+    /* Scroll hint */
+    .hero-scroll-hint {
       position: absolute;
-      top: 15%;
+      bottom: 32px;
       left: 50%;
       transform: translateX(-50%);
-      width: 800px;
-      height: 400px;
-      background: radial-gradient(ellipse, rgba(255, 255, 200, 0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* ─── Hero Title Area (centered top) ─── */
-    .hero-title-area {
-      position: relative;
       z-index: 2;
-      padding-top: clamp(100px, 16vh, 180px);
-      margin-bottom: auto;
-    }
-
-    h1.hero-display {
-      font-family: var(--font-display);
-      font-size: clamp(36px, 5.5vw, 64px);
-      font-weight: 400;
-      line-height: 1.15;
-      letter-spacing: -1.2px;
-      color: var(--color-canvas-white);
-      font-feature-settings: "liga" 0;
-      text-shadow: 0 2px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    /* ─── Hero Info Card (bottom left) ─── */
-    .hero-info-card {
-      position: absolute;
-      bottom: 40px;
-      left: 40px;
-      z-index: 3;
-      max-width: 420px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-radius: 16px;
-      padding: 28px 32px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      text-align: left;
-    }
-
-    .hero-card-title {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3vw, 30px);
-      font-weight: 400;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      color: var(--color-canvas-white);
-      margin-bottom: 12px;
-      font-feature-settings: "liga" 0;
-    }
-
-    .hero-card-desc {
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.65;
-      color: rgba(255, 255, 255, 0.55);
-      margin-bottom: 18px;
-    }
-
-    .hero-card-desc strong {
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 500;
-    }
-
-    .hero-card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      color: var(--color-canvas-white);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      padding-bottom: 2px;
-      transition: border-color .2s;
-    }
-
-    .hero-card-link:hover {
-      border-color: rgba(255, 255, 255, 0.7);
-    }
-
-    .hero-card-link svg {
-      transition: transform .2s;
-    }
-
-    .hero-card-link:hover svg {
-      transform: translateX(3px);
-    }
-
-    /* ─── Hero Clock (top right) ─── */
-    .hero-clock {
-      position: absolute;
-      top: 24px;
-      right: 32px;
-      z-index: 3;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      font-size: 12px;
+      gap: 8px;
+      opacity: 0;
+      animation: fadein 1s ease 3s forwards;
+    }
+    .hero-scroll-hint span {
+      font-size: 11px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.55);
-      letter-spacing: 0.02em;
-    }
-
-    .hero-clock-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 6px #4ade80;
-    }
-
-    /* ─── Floating Stars Animation ─── */
-    .hero-stars {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .hero-star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 50%;
-      animation: twinkle 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes twinkle {
-      0% {
-        opacity: 0.2;
-        transform: scale(0.8);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1.2);
-      }
-    }
-
-    /* ─── Stats bar (bottom of hero, overlaying) ─── */
-    .hero-stats-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 3;
-      display: flex;
-      justify-content: center;
-      gap: var(--s48);
-      padding: 20px var(--s48);
-      background: rgba(10, 10, 25, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .hstat-num {
-      font-family: var(--font-display);
-      font-size: var(--text-heading);
-      font-weight: 400;
-      line-height: var(--leading-heading);
-      letter-spacing: var(--tracking-heading);
-      color: var(--color-canvas-white);
-      font-feature-settings: "liga" 0;
-    }
-
-    .hstat-num sup {
-      font-size: 18px;
-      color: var(--color-action-azure);
-      font-family: var(--font-body);
-    }
-
-    .hstat-lbl {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.35);
-      margin-top: var(--s8);
+      color: rgba(255,255,255,0.3);
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+      animation: scrollline 1.5s ease-in-out infinite;
+    }
+    @keyframes scrollline {
+      0%,100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.5); opacity: 0.4; }
+    }
+    @keyframes fadein {
+      to { opacity: 1; }
     }
 
     /* Keep old button styles for other sections */
@@ -1663,25 +1488,6 @@
         font-size: 32px;
       }
 
-      .hero-info-card {
-        left: 16px;
-        right: 16px;
-        bottom: 80px;
-        max-width: none;
-      }
-
-      .hero-stats-bar {
-        gap: var(--s24);
-        padding: 14px var(--s16);
-      }
-
-      .hero-stats-bar .hstat-num {
-        font-size: 24px;
-      }
-
-      .hero-clock {
-        display: none;
-      }
 
       .ab-grid,
       .ab-top,
@@ -1746,65 +1552,12 @@
 
   <!-- ═══════ HERO ═══════ -->
   <section id="hero">
-    <!-- Video Background -->
-    <video class="hero-video" autoplay loop muted playsinline poster="/city-night-bg.jpg">
-      <source src="/city-night-bg.mp4" type="video/mp4">
-    </video>
+    <canvas id="particleCanvas"></canvas>
 
-    <!-- Floating stars -->
-    <div class="hero-stars" id="heroStars"></div>
-
-    <!-- Clock top-right -->
-    <div class="hero-clock">
-      <span class="hero-clock-dot"></span>
-      <span id="heroClock"></span>
-      <span style="margin-left:4px;opacity:.5">Hà Nội</span>
-    </div>
-
-    <!-- Centered Title -->
-    <div class="hero-title-area reveal">
-      <h1 class="hero-display">
-        <span data-vi="Xin chào, tôi là" data-en="Hello, I am">Xin chào, tôi là</span><br>
-        <span data-vi="Lê Ngọc Minh Chương" data-en="Lê Ngọc Minh Chương">Lê Ngọc Minh Chương</span>
-      </h1>
-    </div>
-
-    <!-- Info Card bottom-left -->
-    <div class="hero-info-card reveal">
-      <div class="hero-card-title" data-vi="Đam mê dữ liệu & AI" data-en="Passionate about Data & AI">
-        Đam mê dữ liệu &amp; AI
-      </div>
-      <div class="hero-card-desc" id="hero-bio-text">
-        Sinh viên năm nhất ngành <strong>Phân tích kinh doanh</strong> tại Đại học Kinh tế Quốc dân. Ứng dụng dữ liệu và
-        AI để giải quyết bài toán kinh doanh thực tế.
-      </div>
-      <a href="#about" class="hero-card-link">
-        <span data-vi="Tìm hiểu về tôi" data-en="Get to know me">Tìm hiểu về tôi</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round">
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-      </a>
-    </div>
-
-    <!-- Stats Bar -->
-    <div class="hero-stats-bar">
-      <div>
-        <div class="hstat-num">SQL<sup>✓</sup></div>
-        <div class="hstat-lbl" data-vi="LeetCode hoàn thành" data-en="LeetCode Cleared">LeetCode hoàn thành</div>
-      </div>
-      <div>
-        <div class="hstat-num">1<sup>st</sup></div>
-        <div class="hstat-lbl" data-vi="AI Agent tự build" data-en="AI Agent Built">AI Agent tự build</div>
-      </div>
-      <div>
-        <div class="hstat-num">3<sup>+</sup></div>
-        <div class="hstat-lbl" data-vi="Dự án thực tế" data-en="Real Projects">Dự án thực tế</div>
-      </div>
-      <div>
-        <div class="hstat-num">19</div>
-        <div class="hstat-lbl" data-vi="Tuổi · 26/01/2007" data-en="Years Old · 26/01">Tuổi · 26/01/2007</div>
-      </div>
+    <!-- Scroll hint -->
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
     </div>
   </section>
 
@@ -2415,6 +2168,161 @@
   </script>
 
 
+  <!-- ═══════ PARTICLE HERO SCRIPT ═══════ -->
+  <script>
+  (function() {
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    let phase = 'imploding', phaseTimer = 0;
+    const HOLD = 180;   // frames giữ chữ (~3s ở 60fps)
+    const EXPL = 140;   // frames phân tán trước khi tụ lại
+
+    const LINES = {
+      vi: ['Xin chào, tôi là', 'Lê Ngọc Minh Chương'],
+      en: ['Hello, I am',      'Lê Ngọc Minh Chương'],
+    };
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function sampleText(lang) {
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const c = off.getContext('2d');
+      c.fillStyle = '#000'; c.fillRect(0,0,W,H);
+      c.fillStyle = '#fff';
+      c.textAlign = 'center'; c.textBaseline = 'middle';
+      const lines = LINES[lang] || LINES.vi;
+      const sz1 = Math.min(W * 0.055, 56);
+      const sz2 = Math.min(W * 0.088, 88);
+      const gap = Math.min(H * 0.115, 90);
+      c.font = `400 ${sz1}px "Sentient",Georgia,serif`;
+      c.fillText(lines[0], W/2, H/2 - gap/2);
+      c.font = `400 ${sz2}px "Sentient",Georgia,serif`;
+      c.fillText(lines[1], W/2, H/2 + gap);
+
+      const img  = c.getImageData(0,0,W,H).data;
+      const pts  = [];
+      const step = 2; /* dense sampling — every 2px */
+      for (let y=0; y<H; y+=step)
+        for (let x=0; x<W; x+=step)
+          if (img[(y*W+x)*4] > 80) pts.push({x,y});
+      return pts;
+    }
+
+    function buildParticles(lang) {
+      const pts    = sampleText(lang);
+      const N      = Math.min(pts.length, 6000);
+      const chosen = pts.sort(() => Math.random()-.5).slice(0, N);
+      particles = chosen.map(p => ({
+        tx: p.x, ty: p.y,
+        x:  W/2 + (Math.random()-.5)*W*2,
+        y:  H/2 + (Math.random()-.5)*H*2,
+        vx: 0, vy: 0,
+        alpha: 0,
+        size: Math.random()*1.6 + 1.0,  /* bigger particles */
+        ex: (p.x - W/2)/(W/2),
+        ey: (p.y - H/2)/(H/2),
+      }));
+      phase = 'imploding'; phaseTimer = 0;
+    }
+
+    function explode() {
+      phase = 'exploding'; phaseTimer = 0;
+      particles.forEach(p => {
+        /* Slower explosion — speed 3-9 instead of 6-20 */
+        const speed = Math.random()*6 + 3;
+        const angle = Math.atan2(
+          p.ey + (Math.random()-.5)*0.8,
+          p.ex + (Math.random()-.5)*0.8
+        );
+        p.vx = Math.cos(angle) * speed;
+        p.vy = Math.sin(angle) * speed;
+      });
+    }
+
+    function reform(lang) {
+      const pts    = sampleText(lang);
+      const N      = particles.length;
+      const chosen = pts.sort(() => Math.random()-.5).slice(0, N);
+      particles.forEach((p,i) => {
+        p.tx = chosen[i]?.x ?? W/2;
+        p.ty = chosen[i]?.y ?? H/2;
+        p.ex = (p.tx-W/2)/(W/2);
+        p.ey = (p.ty-H/2)/(H/2);
+        p.vx *= 0.15; p.vy *= 0.15;
+      });
+      phase = 'imploding'; phaseTimer = 0;
+    }
+
+    function tick() {
+      ctx.fillStyle = 'rgba(0,0,0,0.20)';
+      ctx.fillRect(0,0,W,H);
+      phaseTimer++;
+
+      if (phase === 'imploding') {
+        let settled = 0;
+        particles.forEach(p => {
+          const dx = p.tx-p.x, dy = p.ty-p.y;
+          p.vx += dx * 0.09;
+          p.vy += dy * 0.09;
+          p.vx *= 0.70; p.vy *= 0.70;
+          p.x  += p.vx;  p.y  += p.vy;
+          p.alpha = Math.min(1, p.alpha + 0.04);
+          if (Math.abs(dx)<1.5 && Math.abs(dy)<1.5) settled++;
+        });
+        if (settled > particles.length*0.88 && phaseTimer > 40) {
+          phase='hold'; phaseTimer=0;
+        }
+      }
+      else if (phase === 'hold') {
+        particles.forEach(p => {
+          p.x += (p.tx-p.x)*0.12;
+          p.y += (p.ty-p.y)*0.12;
+          p.vx*=0.5; p.vy*=0.5;
+        });
+        if (phaseTimer > HOLD) explode();
+      }
+      else { /* exploding */
+        particles.forEach(p => {
+          /* Slow drag — more floaty */
+          p.vy += 0.04;
+          p.vx *= 0.992; p.vy *= 0.992;
+          p.x  += p.vx;   p.y  += p.vy;
+          /* Slow fade out */
+          p.alpha = Math.max(0, p.alpha - 0.006);
+        });
+        if (phaseTimer > EXPL) {
+          reform(window._currentLang || 'vi');
+        }
+      }
+
+      ctx.fillStyle = '#ffffff';
+      particles.forEach(p => {
+        if (p.alpha < 0.01) return;
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+
+    resize();
+    window.addEventListener('resize', () => { resize(); buildParticles(window._currentLang||'vi'); });
+    document.fonts.ready.then(() => { buildParticles('vi'); tick(); });
+
+    window._particleSetLang = (lang) => {
+      explode();
+      setTimeout(() => reform(lang), 1000);
+    };
+  })();
+  </script>
+
   <!-- ═══════ SCRIPT ═══════ -->
   <script>
 
@@ -2495,9 +2403,12 @@
 
     /* ── LANGUAGE TOGGLE ── */
     let currentLang = 'vi';
+    window._currentLang = 'vi';
 
     function setLang(lang) {
       currentLang = lang;
+    window._currentLang = lang;
+    if (window._particleSetLang) window._particleSetLang(lang);
       document.querySelectorAll('.glang-btn').forEach(b => b.classList.remove('active'));
       document.querySelector(`.glang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
 
