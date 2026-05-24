@@ -2173,10 +2173,10 @@
   (function() {
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
-    let W, H, particles = [];
+    let W, H, DPR, particles = [];
     let phase = 'imploding', phaseTimer = 0;
-    const HOLD = 180;   // frames giữ chữ (~3s ở 60fps)
-    const EXPL = 140;   // frames phân tán trước khi tụ lại
+    const HOLD = 180;
+    const EXPL = 140;
 
     const LINES = {
       vi: ['Xin chào, tôi là', 'Lê Ngọc Minh Chương'],
@@ -2184,21 +2184,33 @@
     };
 
     function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W   = window.innerWidth;
+      H   = window.innerHeight;
+      /* Scale canvas for retina — makes particles sharper */
+      canvas.width  = W * DPR;
+      canvas.height = H * DPR;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(DPR, DPR);
     }
 
     function sampleText(lang) {
       const off = document.createElement('canvas');
+      /* Use logical pixels for sampling */
       off.width = W; off.height = H;
       const c = off.getContext('2d');
       c.fillStyle = '#000'; c.fillRect(0,0,W,H);
       c.fillStyle = '#fff';
       c.textAlign = 'center'; c.textBaseline = 'middle';
+
       const lines = LINES[lang] || LINES.vi;
-      const sz1 = Math.min(W * 0.055, 56);
-      const sz2 = Math.min(W * 0.088, 88);
-      const gap = Math.min(H * 0.115, 90);
+      /* Mobile-aware font size — clamp more aggressively */
+      const isMobile = W < 600;
+      const sz1 = isMobile ? Math.min(W * 0.052, 26) : Math.min(W * 0.048, 52);
+      const sz2 = isMobile ? Math.min(W * 0.075, 38) : Math.min(W * 0.075, 76);
+      const gap = isMobile ? Math.min(H * 0.09, 56)  : Math.min(H * 0.11, 88);
+
       c.font = `400 ${sz1}px "Sentient",Georgia,serif`;
       c.fillText(lines[0], W/2, H/2 - gap/2);
       c.font = `400 ${sz2}px "Sentient",Georgia,serif`;
@@ -2206,7 +2218,7 @@
 
       const img  = c.getImageData(0,0,W,H).data;
       const pts  = [];
-      const step = 2; /* dense sampling — every 2px */
+      const step = isMobile ? 2 : 2;
       for (let y=0; y<H; y+=step)
         for (let x=0; x<W; x+=step)
           if (img[(y*W+x)*4] > 80) pts.push({x,y});
@@ -2215,17 +2227,16 @@
 
     function buildParticles(lang) {
       const pts    = sampleText(lang);
-      const N      = Math.min(pts.length, 6000);
+      const N      = Math.min(pts.length, W < 600 ? 3000 : 6000);
       const chosen = pts.sort(() => Math.random()-.5).slice(0, N);
       particles = chosen.map(p => ({
         tx: p.x, ty: p.y,
         x:  W/2 + (Math.random()-.5)*W*2,
         y:  H/2 + (Math.random()-.5)*H*2,
-        vx: 0, vy: 0,
-        alpha: 0,
-        size: Math.random()*1.6 + 1.0,  /* bigger particles */
-        ex: (p.x - W/2)/(W/2),
-        ey: (p.y - H/2)/(H/2),
+        vx: 0, vy: 0, alpha: 0,
+        size: W < 600 ? Math.random()*1.4+0.9 : Math.random()*1.6+1.0,
+        ex: (p.x-W/2)/(W/2),
+        ey: (p.y-H/2)/(H/2),
       }));
       phase = 'imploding'; phaseTimer = 0;
     }
@@ -2233,14 +2244,13 @@
     function explode() {
       phase = 'exploding'; phaseTimer = 0;
       particles.forEach(p => {
-        /* Slower explosion — speed 3-9 instead of 6-20 */
-        const speed = Math.random()*6 + 3;
+        const speed = Math.random()*6+3;
         const angle = Math.atan2(
           p.ey + (Math.random()-.5)*0.8,
           p.ex + (Math.random()-.5)*0.8
         );
-        p.vx = Math.cos(angle) * speed;
-        p.vy = Math.sin(angle) * speed;
+        p.vx = Math.cos(angle)*speed;
+        p.vy = Math.sin(angle)*speed;
       });
     }
 
@@ -2266,59 +2276,53 @@
       if (phase === 'imploding') {
         let settled = 0;
         particles.forEach(p => {
-          const dx = p.tx-p.x, dy = p.ty-p.y;
-          p.vx += dx * 0.09;
-          p.vy += dy * 0.09;
-          p.vx *= 0.70; p.vy *= 0.70;
-          p.x  += p.vx;  p.y  += p.vy;
-          p.alpha = Math.min(1, p.alpha + 0.04);
-          if (Math.abs(dx)<1.5 && Math.abs(dy)<1.5) settled++;
+          const dx=p.tx-p.x, dy=p.ty-p.y;
+          p.vx+=dx*.09; p.vy+=dy*.09;
+          p.vx*=.70; p.vy*=.70;
+          p.x+=p.vx; p.y+=p.vy;
+          p.alpha=Math.min(1,p.alpha+.04);
+          if(Math.abs(dx)<1.5&&Math.abs(dy)<1.5) settled++;
         });
-        if (settled > particles.length*0.88 && phaseTimer > 40) {
-          phase='hold'; phaseTimer=0;
-        }
+        if(settled>particles.length*.88&&phaseTimer>40){phase='hold';phaseTimer=0;}
       }
-      else if (phase === 'hold') {
-        particles.forEach(p => {
-          p.x += (p.tx-p.x)*0.12;
-          p.y += (p.ty-p.y)*0.12;
-          p.vx*=0.5; p.vy*=0.5;
+      else if (phase==='hold') {
+        particles.forEach(p=>{
+          p.x+=(p.tx-p.x)*.12; p.y+=(p.ty-p.y)*.12;
+          p.vx*=.5; p.vy*=.5;
         });
-        if (phaseTimer > HOLD) explode();
+        if(phaseTimer>HOLD) explode();
       }
-      else { /* exploding */
-        particles.forEach(p => {
-          /* Slow drag — more floaty */
-          p.vy += 0.04;
-          p.vx *= 0.992; p.vy *= 0.992;
-          p.x  += p.vx;   p.y  += p.vy;
-          /* Slow fade out */
-          p.alpha = Math.max(0, p.alpha - 0.006);
+      else {
+        particles.forEach(p=>{
+          p.vy+=.04; p.vx*=.992; p.vy*=.992;
+          p.x+=p.vx; p.y+=p.vy;
+          p.alpha=Math.max(0,p.alpha-.006);
         });
-        if (phaseTimer > EXPL) {
-          reform(window._currentLang || 'vi');
-        }
+        if(phaseTimer>EXPL) reform(window._currentLang||'vi');
       }
 
-      ctx.fillStyle = '#ffffff';
-      particles.forEach(p => {
-        if (p.alpha < 0.01) return;
-        ctx.globalAlpha = p.alpha;
+      ctx.fillStyle='#fff';
+      particles.forEach(p=>{
+        if(p.alpha<.01) return;
+        ctx.globalAlpha=p.alpha;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
         ctx.fill();
       });
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha=1;
       requestAnimationFrame(tick);
     }
 
     resize();
-    window.addEventListener('resize', () => { resize(); buildParticles(window._currentLang||'vi'); });
-    document.fonts.ready.then(() => { buildParticles('vi'); tick(); });
+    window.addEventListener('resize',()=>{
+      resize();
+      buildParticles(window._currentLang||'vi');
+    });
+    document.fonts.ready.then(()=>{ buildParticles('vi'); tick(); });
 
-    window._particleSetLang = (lang) => {
+    window._particleSetLang=(lang)=>{
       explode();
-      setTimeout(() => reform(lang), 1000);
+      setTimeout(()=>reform(lang),1000);
     };
   })();
   </script>
