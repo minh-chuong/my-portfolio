@@ -2207,13 +2207,17 @@
       const lines = LINES[lang] || LINES.vi;
       /* Mobile-aware font size — clamp more aggressively */
       const isMobile = W < 600;
-      const sz1 = isMobile ? Math.min(W * 0.052, 26) : Math.min(W * 0.048, 52);
-      const sz2 = isMobile ? Math.min(W * 0.075, 38) : Math.min(W * 0.075, 76);
-      const gap = isMobile ? Math.min(H * 0.09, 56)  : Math.min(H * 0.11, 88);
+      const sz1 = isMobile ? Math.min(W * 0.068, 32) : Math.min(W * 0.048, 52);
+      const sz2 = isMobile ? Math.min(W * 0.095, 48) : Math.min(W * 0.075, 76);
+      const gap = isMobile ? Math.min(H * 0.10, 60)  : Math.min(H * 0.11, 88);
+      /* Use Inter on mobile — always loaded, renders crisper as particles */
+      const fontFamily = isMobile
+        ? '"Inter",system-ui,sans-serif'
+        : '"Sentient",Georgia,serif';
 
-      c.font = `400 ${sz1}px "Sentient",Georgia,serif`;
+      c.font = `600 ${sz1}px ${fontFamily}`;
       c.fillText(lines[0], W/2, H/2 - gap/2);
-      c.font = `400 ${sz2}px "Sentient",Georgia,serif`;
+      c.font = `700 ${sz2}px ${fontFamily}`;
       c.fillText(lines[1], W/2, H/2 + gap);
 
       const img  = c.getImageData(0,0,W,H).data;
